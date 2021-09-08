@@ -23,6 +23,13 @@ export type AttributesB = Item | Location | PurchaseMethod | Gender;
 export type ItemDictionary = {
   [itemName in Item]?: number;
 };
+export type TagDictionary = {
+  [tagName in Tag]?: number;
+};
+export type LocDictionary = {
+  [locationName in Location]: number;
+};
+export type SalesPeriod = Month | number | 'all';
 
 
 /* Write an interface, Rank which has the following optional properties:
@@ -33,6 +40,15 @@ export type ItemDictionary = {
 5. monthlySales - array of tuples of Month and number
 6. weeklySales - array of tuples of Day and number
 7. all - a number */
+export interface Rank {
+  locations: [string, number][];
+  items: [string, number][];
+  tags: [string, number][];
+  yearlySales: [number, number][];
+  monthlySales: [Month, number][];
+  weeklySales: [Day, number][];
+  all: number;
+}
 
 /* Create an enum Order that has the following elements: 
 ASC for smallest to highest order

@@ -1,13 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-/* Write an interface, Rank which has the following optional properties:
-1. locations - array of tuples of string and number
-2. items - array of tuples of string and number
-3. tags - array of tuples of string and number
-4. yearlySales - array of tuples of number and number
-5. monthlySales - array of tuples of Month and number
-6. weeklySales - array of tuples of Day and number
-7. all - a number */
 /* Create an enum Order that has the following elements:
 ASC for smallest to highest order
 DESC for highest to smallest order */
