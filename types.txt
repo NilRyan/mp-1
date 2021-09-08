@@ -8,3 +8,15 @@ Set(7) {
   'binder',
   'laptop'
 }
+Tags
+Set(9) {
+  'office',
+  'stationary',
+  'writing',
+  'school',
+  'travel',
+  'kids',
+  'general',
+  'organization',
+  'electronics'
+}

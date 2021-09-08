@@ -14,12 +14,15 @@ const readInterface = readline.createInterface({
   console: false
 });
 let item = [];
+let tags = []
 // let a: Requirements = new Analytics([])
 readInterface.on('line', function(line) {
  
   let obj: any = JSON.parse(line)
   // console.log(...obj.items);
+  // console.log(obj);
   item.push(...obj.items);
+  tags.push(...obj.items)
 
 
     // let t: AbstractTransaction = new Transaction( Parser.getCustomer(obj),Parser.getProducts(obj), 
@@ -35,7 +38,11 @@ readInterface.on('line', function(line) {
     
     //console.log(a.medianAge('notepad'))
     console.log(2)
-    console.log(new Set(item.map((i) => i.name)));
+  console.log(new Set(item.map((i) => i.name))); // Item
+  console.log(new Set(tags.map((i) => {
+    const tags = i.tags;
+    return tags;
+  } ).flat())); // Tags
   });
 
   console.log(3)

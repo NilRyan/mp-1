@@ -13,6 +13,7 @@
 // Create a type alias, SalesPeriod which is the union type of Month, Day, number and 'All'
 export type Gender = 'M' | 'F';
 export type Item = 'printer paper' | 'envelopes' | 'notepad' | 'backpack' | 'pens' | 'binder' | 'laptop';
+export type Tag = 'office' | 'stationary' | 'writing' | 'school' | 'travel' | 'kids' | 'general' | 'organization' | 'electronics';
 
 /* Write an interface, Rank which has the following optional properties:
 1. locations - array of tuples of string and number
