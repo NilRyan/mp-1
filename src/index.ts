@@ -47,8 +47,8 @@ readInterface.on('line', function(line) {
   //   const tags = i.tags;
   //   return tags;
   // } ).flat())); // Tags
-  console.log(new Set(locations));
-  console.log(new Set(purchaseMeth));
+  // console.log(new Set(locations));
+  // console.log(new Set(purchaseMeth));
   });
 
   console.log(3)

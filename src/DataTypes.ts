@@ -53,11 +53,22 @@ export interface Rank {
 /* Create an enum Order that has the following elements: 
 ASC for smallest to highest order
 DESC for highest to smallest order */
+
+export enum Order {
+  ASC,
+  DESC
+}
   
 /* Create an enum Accounting that has the following elements: 
 QUANTITY for the quantity bought
 REVENUE for the product of quantity bought and the unit price
 PRICE for the unit price of an item */
+
+export enum Accounting {
+  QUANTITY,
+  PRICE, 
+  REVENUE,
+}
 
 /* Create an enum Period that has the following elements: 
 YEARLY for the annual data
@@ -65,5 +76,17 @@ MONTHLY for the monthly data
 WEEKLY for the day of the week
 ALL for all the avaibale data*/
 
+export enum Period {
+  YEARLY,
+  MONTHLY,
+  WEEKLY,
+  ALL
+}
+
 /* Create an enum Level that has the following elements: 
 HIGHEST and LOWEST*/
+
+export enum Level {
+  HIGHEST,
+  LOWEST
+}
