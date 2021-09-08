@@ -1,5 +1,5 @@
-export type Item = 'red' | 'blue'; // placeholder
-export type Tag = 'brand new' | 'old'; // placeholder
+import { Item, Tag } from "./DataTypes";
+
 export class Product {
   private _tags: Tag[];
   constructor(private _item: Item, private _price: number) {}

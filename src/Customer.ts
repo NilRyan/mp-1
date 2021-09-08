@@ -1,4 +1,5 @@
-export type Gender = 'male' | 'female' | 'LGBTQ+'
+import { Gender } from "./DataTypes";
+
 export class Customer {
   constructor(private _gender: Gender, private _age: number, private _email: string) { };
 
