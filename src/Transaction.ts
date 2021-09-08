@@ -66,33 +66,34 @@ export class Transaction extends AbstractTransaction {
     let quantity: ItemDictionary = {};
     let revenue: ItemDictionary = {};
     let price: ItemDictionary = {};
-    if (acct === Accounting.QUANTITY) {
-      this._products.forEach((product) => {
+   
+    this._products.forEach((product) => {
         if (quantity.hasOwnProperty(product.item)) {
           quantity[product.item]++;
         } else {
           quantity[product.item] = 0;
         }
-      })
-    }
+    })
+   
+    this._products.forEach((product) => {
+      price[product.item] = product.price;
+    })
+    
     if (acct === Accounting.REVENUE) {
-      this._products.forEach((product) => {
-        if (revenue.hasOwnProperty(product.item)) {
-          revenue[product.item];
-        } else {
-          revenue[product.item] = 0;
-        }
-      })
+      for (const property in quantity) {
+        revenue[property] = quantity[property] * price[property];
+      }
+      return revenue;
     }
+
     if (acct === Accounting.PRICE) {
-      this._products.forEach((product) => {
-        if (price.hasOwnProperty(product.item)) {
-          price[product.item]++;
-        } else {
-          price[product.item] = 0;
-        }
-      })
+      return price;
     }
+    if (acct === Accounting.QUANTITY) {
+      return quantity;
+    }
+
+    
 
   };
 
