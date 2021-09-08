@@ -14,7 +14,9 @@ const readInterface = readline.createInterface({
   console: false
 });
 let item = [];
-let tags = []
+let tags = [];
+let locations = [];
+let purchaseMeth = [];
 // let a: Requirements = new Analytics([])
 readInterface.on('line', function(line) {
  
@@ -22,7 +24,9 @@ readInterface.on('line', function(line) {
   // console.log(...obj.items);
   // console.log(obj);
   item.push(...obj.items);
-  tags.push(...obj.items)
+  tags.push(...obj.items);
+  locations.push(obj.storeLocation);
+  purchaseMeth.push(obj.purchaseMethod)
 
 
     // let t: AbstractTransaction = new Transaction( Parser.getCustomer(obj),Parser.getProducts(obj), 
@@ -38,11 +42,13 @@ readInterface.on('line', function(line) {
     
     //console.log(a.medianAge('notepad'))
     console.log(2)
-  console.log(new Set(item.map((i) => i.name))); // Item
-  console.log(new Set(tags.map((i) => {
-    const tags = i.tags;
-    return tags;
-  } ).flat())); // Tags
+  // console.log(new Set(item.map((i) => i.name))); // Item
+  // console.log(new Set(tags.map((i) => {
+  //   const tags = i.tags;
+  //   return tags;
+  // } ).flat())); // Tags
+  console.log(new Set(locations));
+  console.log(new Set(purchaseMeth));
   });
 
   console.log(3)

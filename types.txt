@@ -20,3 +20,14 @@ Set(9) {
   'organization',
   'electronics'
 }
+Location
+Set(6) {
+  'Denver',
+  'Seattle',
+  'London',
+  'Austin',
+  'New York',
+  'San Diego'
+}
+Purchase Methods
+Set(3) { 'Online', 'Phone', 'In store' }

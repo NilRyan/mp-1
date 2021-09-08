@@ -14,6 +14,16 @@
 export type Gender = 'M' | 'F';
 export type Item = 'printer paper' | 'envelopes' | 'notepad' | 'backpack' | 'pens' | 'binder' | 'laptop';
 export type Tag = 'office' | 'stationary' | 'writing' | 'school' | 'travel' | 'kids' | 'general' | 'organization' | 'electronics';
+export type Location = 'Denver' | 'Seattle' | 'London' | 'Austin' | 'New York' | 'San Diego';
+export type PurchaseMethod = 'Online' | 'Phone' | 'In store';
+export type Month = 'Jan' | 'Feb' | 'Mar' | 'Apr' | 'May' | 'June' | 'Jul' | 'Aug' | 'Sep' | 'Oct' | 'Nov' | 'Dec';
+export type Day = 'Mon' | 'Tue' | 'Wed' | 'Thu' | 'Fri' | 'Sat' | 'Sun';
+export type AttributesA = Gender | number | boolean;
+export type AttributesB = Item | Location | PurchaseMethod | Gender;
+export type ItemDictionary = {
+  [itemName in Item]?: number;
+};
+
 
 /* Write an interface, Rank which has the following optional properties:
 1. locations - array of tuples of string and number
