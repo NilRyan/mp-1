@@ -11,7 +11,8 @@
 // Create a type alias, TagDictionary which is an object whose optional keys are the string literal types of Tag and their corresponding values are of number type
 // Create a type alias, LocDictionary which is an object whose optional keys are the string literal types of Location and their corresponding values are of number type
 // Create a type alias, SalesPeriod which is the union type of Month, Day, number and 'All'
-
+export type Gender = 'M' | 'F';
+export type Item = 'printer paper' | 'envelopes' | 'notepad' | 'backpack' | 'pens' | 'binder' | 'laptop';
 
 /* Write an interface, Rank which has the following optional properties:
 1. locations - array of tuples of string and number

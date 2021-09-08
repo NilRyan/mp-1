@@ -8,5 +8,14 @@ class Customer {
         this._email = _email;
     }
     ;
+    get gender() {
+        return this._gender;
+    }
+    get age() {
+        return this._age;
+    }
+    get email() {
+        return this._email;
+    }
 }
 exports.Customer = Customer;

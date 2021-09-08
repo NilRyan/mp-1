@@ -1,0 +1,10 @@
+Item
+Set(7) {
+  'printer paper',
+  'notepad',
+  'pens',
+  'backpack',
+  'envelopes',
+  'binder',
+  'laptop'
+}
