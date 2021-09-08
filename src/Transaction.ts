@@ -1,6 +1,6 @@
 import { AbstractTransaction } from "./AbstractTransaction";
 import { Customer } from "./Customer";
-import { PurchaseMethod, Location, Item, Accounting, Level, ItemDictionary } from "./DataTypes";
+import { PurchaseMethod, Location, Item, Accounting, Level, ItemDictionary, Day, Month } from "./DataTypes";
 import { Product } from "./Product";
 
 export class Transaction extends AbstractTransaction {
@@ -62,6 +62,7 @@ export class Transaction extends AbstractTransaction {
     For Accounting.REVENUE, it will collect all the revenue(price * quantity) per item.
     For Accounting.PRICE, it will collect all the price per item.
     e.g. {'notepad':123,'laptop':345} */
+  // TODO implement the level 
   perItem(acct: Accounting, level?: Level): ItemDictionary {
     let quantity: ItemDictionary = {};
     let revenue: ItemDictionary = {};
@@ -92,13 +93,17 @@ export class Transaction extends AbstractTransaction {
     if (acct === Accounting.QUANTITY) {
       return quantity;
     }
-
-    
-
   };
 
   /* This function computes the total amount of the transaction with respect to the parameter acct, by adding all the values of the perItem.*/
-  total(acct: Accounting, level?: Level): number;
+  total(acct: Accounting, level?: Level): number {
+    let total: number = 0;
+    const items: ItemDictionary = this.perItem(acct);
+    for (const property in items) {
+      total += items[property];
+    }
+    return total;
+  };
 
   /* This function accepts one required parameter(either Accounting.QUANTITY, Accounting.REVENUE or Accounting.PRICE) and an optional one(Level.HIGHEST or Level.LOWEST)
     It computes the values for all the tags existing in this transaction.
@@ -107,16 +112,24 @@ export class Transaction extends AbstractTransaction {
     For Accounting.REVENUE, it will sum up only the revenues (price times quantity) of the sold items containing the tag
     For Accounting.PRICE, it will get the highest/lowest price of the item containing the tag depending on the optional level. 
     */
-  perTag(acct: Accounting, level?: Level): TagDictionary;
+  perTag(acct: Accounting, level?: Level): TagDictionary {
+
+  };
 
   // This function gets the day of the week given of the date(e.g. 'Mon', 'Tue', etc.)
-  getDay(): Day;
+  getDay(): Day {
+    return new Date(this._saleDate).toDateString().split(" ")[0] as Day;
+  };
 
   // This function gets the year of the given date(e.g. 2020, 2021, etc.)
-  getYear(): number;
+  getYear(): number {
+    return Number(new Date(this._saleDate).toDateString().split(" ")[3]);
+  };
 
   // This function gets the month of the given date(e.g. 'Jan', 'Feb', 'Mar' etc.)
-  getMonth(): Month;
+  getMonth(): Month {
+    return new Date(this._saleDate).toDateString().split(" ")[1] as Month;
+  };
 
    
 
