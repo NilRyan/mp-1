@@ -67,7 +67,8 @@ export class  Transaction extends AbstractTransaction {
     let quantity: ItemDictionary = {};
     let revenue: ItemDictionary = {};
     let price: ItemDictionary = {};
-   
+    
+    //* Used forEach to count quantity of an item in the Product[]
     this._products.forEach((product) => {
         if (quantity.hasOwnProperty(product.item)) {
           quantity[product.item]++;
@@ -75,10 +76,19 @@ export class  Transaction extends AbstractTransaction {
           quantity[product.item] = 0;
         }
     })
-   
+    
+    //* Used forEach to determine the prices of each item, a product array can have
+    //* multiple items with the same name and different prices
+    //* Will implement level to determine highest or lowest prices in the item dictionary
+    //! Implemented highest prices as default for now
     this._products.forEach((product) => {
-      price[product.item] = product.price;
+      if (price.hasOwnProperty(product.item)) {
+        price[product.item] = price[product.item] < product.price ? product.price : price[product.item];
+      } else {
+        price[product.item] = product.price;
+      }
     })
+    console.log(price);
     
     if (acct === Accounting.REVENUE) {
       for (const property in quantity) {

@@ -28,22 +28,25 @@ class Sales {
     listPurchaseMethods() {
         return [...new Set(this._sales.map((transaction) => transaction.purchaseMethod))].sort();
     }
-    // TODO functions
     /* This function accepts three required parameters.
-        Depending on the level which is either Level.HIGHEST OR LEVEL.LOWEST,
-        it parses the data to get the highest/lowest price of an item in a given location */
+    Depending on the level which is either Level.HIGHEST OR LEVEL.LOWEST,
+    it parses the data to get the highest/lowest price of an item in a given location */
+    //* Used nested forEach to determine the max or minimum price
     getPrice(location, item, level) {
         let prices = [];
         this._sales
-            .filter((transaction) => transaction.location === location)
             .forEach((transaction) => {
-            const items = transaction.perItem(DataTypes_1.Accounting.PRICE);
-            if (items.hasOwnProperty(item)) {
-                prices.push(items[item]);
+            if (transaction.location === location) {
+                transaction.products.forEach((product) => {
+                    if (product.item === item) {
+                        prices.push(product.price);
+                    }
+                });
             }
         });
         return level === DataTypes_1.Level.HIGHEST ? Math.max(...prices) : Math.min(...prices);
     }
+    // TODO functions
     /* This function accepts one required and one optional parameters.
       It computes the total sales of a given period, optionally in a given location or in all locations.
       For the Period.YEARLY, it should output a sorted array of tuples containing years and the corresponding total amount(e.g. [[2001,123456],[2002,123456],[2003,123456]])
@@ -54,24 +57,28 @@ class Sales {
       The location parameter filters the data for the corresponding location. If unspecified, all branches would be considered.*/
     getSalesFor(period, location) {
         let salesFor = {};
+        let sales = location ? this._sales.filter((transaction) => transaction.location === location) : this._sales;
         if (period === DataTypes_1.Period.YEARLY) {
-            const year = this._sales.map((transaction) => [transaction.getYear(), transaction.total(DataTypes_1.Accounting.REVENUE)]);
+            const year = sales.map((transaction) => [transaction.getYear(), transaction.total(DataTypes_1.Accounting.REVENUE)]);
             salesFor["yearlySales"] = year;
             return salesFor;
         }
         if (period === DataTypes_1.Period.MONTHLY) {
-            const month = this._sales.map((transaction) => [transaction.getMonth(), transaction.total(DataTypes_1.Accounting.REVENUE)]);
+            const month = sales.map((transaction) => [transaction.getMonth(), transaction.total(DataTypes_1.Accounting.REVENUE)]);
             salesFor["monthlySales"] = month;
             return salesFor;
         }
         if (period === DataTypes_1.Period.WEEKLY) {
-            const week = this._sales.map((transaction) => [transaction.getDay(), transaction.total(DataTypes_1.Accounting.REVENUE)]);
+            const week = sales.map((transaction) => [transaction.getDay(), transaction.total(DataTypes_1.Accounting.REVENUE)]);
             salesFor["weeklySales"] = week;
             return salesFor;
         }
         if (period === DataTypes_1.Period.ALL) {
-            salesFor["all"] = this._sales.map((transaction) => {
-                console.log(transaction.products);
+            salesFor["all"] = sales.map((transaction) => {
+                // console.log(transaction.products);
+                // console.log(transaction.total(Accounting.PRICE));
+                // console.log(transaction.total(Accounting.QUANTITY));
+                // console.log(transaction.total(Accounting.REVENUE));
                 return transaction.total(DataTypes_1.Accounting.REVENUE);
             }).reduce((a, b) => a + b);
             return salesFor;

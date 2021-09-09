@@ -40,8 +40,8 @@ readInterface.on('line', function(line) {
   // console.log(a.listLocations());
   // console.log(a.listPurchaseMethods());
   // console.log(a.listTags());
-  // console.log(a.getPrice('Denver', 'notepad', Level.HIGHEST));
-  console.log(a.getSalesFor(Period.ALL));
+  console.log(a.getPrice('Denver', 'notepad', Level.HIGHEST));
+  // console.log(a.getSalesFor(Period.ALL));
     //console.log(a.medianAge('notepad'))
   // console.log(2)
   // console.log(new Set(item.map((i) => i.name))); // Item
