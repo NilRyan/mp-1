@@ -125,13 +125,17 @@ class Sales {
         e.g. getSales(Period.Weekly, Level.LOWEST) will return the day of the week with the lowest sales in a tuple form.
         string for month */
     getSales(period, level) {
+        let sale;
         if (period === DataTypes_1.Period.YEARLY) {
-            let sale = this.getSalesFor(period);
+            sale = this.getSalesFor(period).yearlySales;
         }
-        ;
+        if (period === DataTypes_1.Period.MONTHLY) {
+            sale = this.getSalesFor(period).monthlySales;
+        }
         if (period === DataTypes_1.Period.WEEKLY) {
+            sale = this.getSalesFor(period).weeklySales;
         }
-        return;
+        return level === DataTypes_1.Level.HIGHEST ? sale.sort((a, b) => b[1] - a[1])[0] : sale.sort((a, b) => a[1] - b[1])[0];
     } // years, month(Jan-Dec), day(Sun-Sat)
     /* This function accepts two required and one optional parameters.
         It computes the total sales between the two dates, from and two in a given location.

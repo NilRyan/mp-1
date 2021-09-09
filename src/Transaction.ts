@@ -134,7 +134,7 @@ export class  Transaction extends AbstractTransaction {
         if (quantity.hasOwnProperty(tag)) {
           quantity[tag]++;
         } else {
-          quantity[tag] = 0;
+          quantity[tag] = 1;
         }
       })  
     })

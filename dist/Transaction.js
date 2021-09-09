@@ -120,7 +120,7 @@ class Transaction extends AbstractTransaction_1.AbstractTransaction {
                     quantity[tag]++;
                 }
                 else {
-                    quantity[tag] = 0;
+                    quantity[tag] = 1;
                 }
             });
         });

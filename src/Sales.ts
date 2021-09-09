@@ -138,16 +138,19 @@ export abstract class Sales implements Requirements {
     e.g. getSales(Period.Weekly, Level.LOWEST) will return the day of the week with the lowest sales in a tuple form.
     string for month */
   getSales(period: Period, level: Level): [Month | Day | number | 'All', number] {
+    let sale: [Month | Day | number | 'All', number][];
     if (period === Period.YEARLY) {
-      let sale = this.getSalesFor(period);
-      
-      };
-    
-
-    if (period === Period.WEEKLY) {
-
+      sale = this.getSalesFor(period).yearlySales;
     }
-    return 
+    if (period === Period.MONTHLY) {
+      sale = this.getSalesFor(period).monthlySales;
+    }
+    if (period === Period.WEEKLY) {
+      sale = this.getSalesFor(period).weeklySales;
+    }
+    
+    return level === Level.HIGHEST ? sale.sort((a, b) => b[1] - a[1])[0] : sale.sort((a, b) => a[1] - b[1])[0];
+  
   } // years, month(Jan-Dec), day(Sun-Sat)
 
 

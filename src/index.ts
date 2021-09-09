@@ -44,7 +44,10 @@ readInterface.on('line', function(line) {
   // console.log(a.getSalesFor(Period.ALL));
   // console.log(a.getSalesFor(Period.YEARLY));
   // console.log(a.getSalesFor(Period.MONTHLY));
-  console.log(a.getSalesFor(Period.WEEKLY));
+  // console.log(a.getSalesFor(Period.WEEKLY));
+  // console.log(a.getSales(Period.YEARLY, Level.LOWEST));
+  // console.log(a.getSales(Period.MONTHLY, Level.LOWEST));
+  // console.log(a.getSales(Period.WEEKLY, Level.LOWEST));
     //console.log(a.medianAge('notepad'))
   // console.log(2)
   // console.log(new Set(item.map((i) => i.name))); // Item
@@ -56,8 +59,7 @@ readInterface.on('line', function(line) {
   // console.log(new Set(purchaseMeth));
   });
 
-  console.log(3)
-  
+
 
 
 
