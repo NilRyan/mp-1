@@ -3,6 +3,7 @@ import { Requirements } from './Requirements';
 import { Transaction } from './Transaction';
 import { Accounting, Period, Order, Level} from './DataTypes';
 import { Analytics } from './Analytics';
+import { AbstractTransaction } from './AbstractTransaction';
 const readline = require('readline');
 const fs = require('fs');
 
@@ -28,20 +29,19 @@ readInterface.on('line', function(line) {
   purchaseMeth.push(obj.purchaseMethod)
 
 
-  let t: Transaction = new Transaction(Parser.getCustomer(obj), Parser.getProducts(obj),
+  let t: AbstractTransaction = new Transaction(Parser.getCustomer(obj), Parser.getProducts(obj),
     Parser.getLocation(obj), Parser.getDate(obj),
     Parser.getSatisfaction(obj), Parser.getCoupon(obj),
     Parser.getPurchaseMethod(obj));
   // console.log(t);
   a.add(t);
-
-
 }).on('close', function(line) {
   // console.log(a.listItems());
   // console.log(a.listLocations());
   // console.log(a.listPurchaseMethods());
   // console.log(a.listTags());
-  console.log(a.getPrice('Denver', 'notepad', Level.HIGHEST));
+  // console.log(a.getPrice('Denver', 'notepad', Level.HIGHEST));
+  console.log(a.getSalesFor(Period.ALL));
     //console.log(a.medianAge('notepad'))
   // console.log(2)
   // console.log(new Set(item.map((i) => i.name))); // Item

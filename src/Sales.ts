@@ -45,7 +45,6 @@ export abstract class Sales implements Requirements {
           prices.push(items[item]);
         }
       });
-    
     return level === Level.HIGHEST ? Math.max(...prices) : Math.min(...prices);
   }
 /* This function accepts one required and one optional parameters.
@@ -78,7 +77,10 @@ export abstract class Sales implements Requirements {
     }
 
     if (period === Period.ALL) {
-      salesFor["all"] = this._sales.map((transaction) => transaction.total(Accounting.REVENUE)).reduce((a, b) => a + b);
+      salesFor["all"] = this._sales.map((transaction) => {
+        console.log(transaction.products);
+        return transaction.total(Accounting.REVENUE)
+      }).reduce((a, b) => a + b);
       return salesFor;
     }
   } // YEARLY = {'yearlySales':[[number, number]]}

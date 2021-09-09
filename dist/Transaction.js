@@ -4,22 +4,8 @@ exports.Transaction = void 0;
 const AbstractTransaction_1 = require("./AbstractTransaction");
 const DataTypes_1 = require("./DataTypes");
 class Transaction extends AbstractTransaction_1.AbstractTransaction {
-    _customer;
-    _products;
-    _location;
-    _saleDate;
-    _satisfaction;
-    _coupon;
-    _purchaseMethod;
     constructor(_customer, _products, _location, _saleDate, _satisfaction, _coupon, _purchaseMethod) {
         super(_customer, _products, _location, _saleDate, _satisfaction, _coupon, _purchaseMethod);
-        this._customer = _customer;
-        this._products = _products;
-        this._location = _location;
-        this._saleDate = _saleDate;
-        this._satisfaction = _satisfaction;
-        this._coupon = _coupon;
-        this._purchaseMethod = _purchaseMethod;
     }
     // This function is a getter for the products
     get products() {

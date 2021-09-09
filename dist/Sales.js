@@ -70,7 +70,10 @@ class Sales {
             return salesFor;
         }
         if (period === DataTypes_1.Period.ALL) {
-            salesFor["all"] = this._sales.map((transaction) => transaction.total(DataTypes_1.Accounting.REVENUE)).reduce((a, b) => a + b);
+            salesFor["all"] = this._sales.map((transaction) => {
+                console.log(transaction.products);
+                return transaction.total(DataTypes_1.Accounting.REVENUE);
+            }).reduce((a, b) => a + b);
             return salesFor;
         }
     } // YEARLY = {'yearlySales':[[number, number]]}

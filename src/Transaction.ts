@@ -5,13 +5,13 @@ import { Product } from "./Product";
 
 export class  Transaction extends AbstractTransaction {
   constructor(
-    protected _customer: Customer,
-    protected _products: Product[],
-    protected _location: Location,
-    protected _saleDate: Date,
-    protected _satisfaction: number,
-    protected _coupon: boolean,
-    protected _purchaseMethod: PurchaseMethod
+     _customer: Customer,
+     _products: Product[],
+     _location: Location,
+     _saleDate: Date,
+    _satisfaction: number,
+     _coupon: boolean,
+     _purchaseMethod: PurchaseMethod
   ) {
     super(
       _customer,
