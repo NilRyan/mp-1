@@ -59,18 +59,52 @@ class Sales {
         let salesFor = {};
         let sales = location ? this._sales.filter((transaction) => transaction.location === location) : this._sales;
         if (period === DataTypes_1.Period.YEARLY) {
-            const year = sales.map((transaction) => [transaction.getYear(), transaction.total(DataTypes_1.Accounting.REVENUE)]);
-            salesFor["yearlySales"] = year;
+            const year = sales.map((transaction) => [transaction.getYear(), transaction.total(DataTypes_1.Accounting.REVENUE)]).sort();
+            const yearlySales = [...new Set(year.map((el) => el[0]))].map((el) => {
+                let sale = [el, 0];
+                year.forEach((year) => {
+                    if (year[0] === el) {
+                        sale[1] += year[1];
+                    }
+                });
+                return sale;
+            });
+            salesFor["yearlySales"] = yearlySales;
             return salesFor;
         }
         if (period === DataTypes_1.Period.MONTHLY) {
             const month = sales.map((transaction) => [transaction.getMonth(), transaction.total(DataTypes_1.Accounting.REVENUE)]);
-            salesFor["monthlySales"] = month;
+            const monthlySales = [...new Set(month.map((el) => el[0]))].map((el) => {
+                let sale = [el, 0];
+                month.forEach((month) => {
+                    if (month[0] === el) {
+                        sale[1] += month[1];
+                    }
+                });
+                return sale;
+            });
+            const monthLookUp = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            salesFor["monthlySales"] = monthLookUp.map((month) => {
+                return [month, monthlySales.find((m) => m[0] === month)[1]];
+            });
             return salesFor;
         }
         if (period === DataTypes_1.Period.WEEKLY) {
             const week = sales.map((transaction) => [transaction.getDay(), transaction.total(DataTypes_1.Accounting.REVENUE)]);
-            salesFor["weeklySales"] = week;
+            const weeklySales = [...new Set(week.map((el) => el[0]))].map((el) => {
+                let sale = [el, 0];
+                week.forEach((week) => {
+                    if (week[0] === el) {
+                        sale[1] += week[1];
+                    }
+                });
+                return sale;
+            });
+            const weekLookUp = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+            salesFor["weeklySales"] = weekLookUp.map((week) => {
+                return [week, weeklySales.find((m) => m[0] === week)[1]];
+            });
+            salesFor["weeklySales"] = weeklySales;
             return salesFor;
         }
         if (period === DataTypes_1.Period.ALL) {

@@ -63,7 +63,7 @@ class Transaction extends AbstractTransaction_1.AbstractTransaction {
                 quantity[product.item]++;
             }
             else {
-                quantity[product.item] = 0;
+                quantity[product.item] = 1;
             }
         });
         //* Used forEach to determine the prices of each item, a product array can have
@@ -78,7 +78,6 @@ class Transaction extends AbstractTransaction_1.AbstractTransaction {
                 price[product.item] = product.price;
             }
         });
-        console.log(price);
         if (acct === DataTypes_1.Accounting.REVENUE) {
             for (const property in quantity) {
                 revenue[property] = quantity[property] * price[property];

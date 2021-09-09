@@ -73,7 +73,7 @@ export class  Transaction extends AbstractTransaction {
         if (quantity.hasOwnProperty(product.item)) {
           quantity[product.item]++;
         } else {
-          quantity[product.item] = 0;
+          quantity[product.item] = 1;
         }
     })
     
@@ -88,7 +88,7 @@ export class  Transaction extends AbstractTransaction {
         price[product.item] = product.price;
       }
     })
-    console.log(price);
+  
     
     if (acct === Accounting.REVENUE) {
       for (const property in quantity) {
