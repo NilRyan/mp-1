@@ -1,9 +1,8 @@
-import { AbstractTransaction } from './AbstractTransaction';
-// import {Analytics} from './Analytics'
 import {Parser} from './Parser'
 import { Requirements } from './Requirements';
 import { Transaction } from './Transaction';
 import { Accounting, Period, Order, Level} from './DataTypes';
+import { Analytics } from './Analytics';
 const readline = require('readline');
 const fs = require('fs');
 
@@ -17,7 +16,7 @@ let item = [];
 let tags = [];
 let locations = [];
 let purchaseMeth = [];
-// let a: Requirements = new Analytics([])
+let a: Requirements = new Analytics([])
 readInterface.on('line', function(line) {
  
   let obj: any = JSON.parse(line)
@@ -29,17 +28,20 @@ readInterface.on('line', function(line) {
   purchaseMeth.push(obj.purchaseMethod)
 
 
-  let t: AbstractTransaction = new Transaction( Parser.getCustomer(obj),Parser.getProducts(obj), 
-                                                Parser.getLocation(obj),Parser.getDate(obj), 
-                                                Parser.getSatisfaction(obj),Parser.getCoupon(obj),
-                                                Parser.getPurchaseMethod(obj))
-  console.log(t);
-    // a.add(t)
+  let t: Transaction = new Transaction(Parser.getCustomer(obj), Parser.getProducts(obj),
+    Parser.getLocation(obj), Parser.getDate(obj),
+    Parser.getSatisfaction(obj), Parser.getCoupon(obj),
+    Parser.getPurchaseMethod(obj));
+  // console.log(t);
+  a.add(t);
 
-    //console.log(1)
 
 }).on('close', function(line) {
-    
+  // console.log(a.listItems());
+  // console.log(a.listLocations());
+  // console.log(a.listPurchaseMethods());
+  // console.log(a.listTags());
+  console.log(a.getPrice('Denver', 'notepad', Level.HIGHEST));
     //console.log(a.medianAge('notepad'))
   // console.log(2)
   // console.log(new Set(item.map((i) => i.name))); // Item

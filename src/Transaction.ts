@@ -86,7 +86,9 @@ export class  Transaction extends AbstractTransaction {
       }
       return revenue;
     }
-
+   
+    // console.log(price);
+    
     if (acct === Accounting.PRICE) {
       return price;
     }

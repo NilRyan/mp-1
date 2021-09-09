@@ -9,7 +9,7 @@ export abstract class Sales implements Requirements {
     this._sales.push(transaction);
   }
   listLocations() {
-    return [...new Set(this._sales.map((transaction) => transaction.location))];
+    return [...new Set(this._sales.map((transaction) => transaction.location))].sort();
   }
   listTags() {
     const listOfTags = [
@@ -26,21 +26,27 @@ export abstract class Sales implements Requirements {
     return listOfTags;
   }
   listItems() {
-    return [...new Set(this._sales.map((transaction) => transaction.listItems()).flat())];
+    return [...new Set(this._sales.map((transaction) => transaction.listItems()).flat())].sort();
   }
   listPurchaseMethods() {
-    return [...new Set(this._sales.map((transaction) => transaction.purchaseMethod))];
+    return [...new Set(this._sales.map((transaction) => transaction.purchaseMethod))].sort();
   }
   // TODO functions
 /* This function accepts three required parameters. 
     Depending on the level which is either Level.HIGHEST OR LEVEL.LOWEST, 
     it parses the data to get the highest/lowest price of an item in a given location */
   getPrice(location: Location, item: Item, level: Level): number{
-    const price = this._sales
+    let prices: number[] = [];
+    this._sales
       .filter((transaction) => transaction.location === location)
-      .map((transaction) => transaction.perItem(Accounting.PRICE, level));
+      .forEach((transaction) => {
+        const items = transaction.perItem(Accounting.PRICE);
+        if (items.hasOwnProperty(item)) {
+          prices.push(items[item]);
+        }
+      });
     
-    return price[0][item];
+    return level === Level.HIGHEST ? Math.max(...prices) : Math.min(...prices);
   }
 /* This function accepts one required and one optional parameters.
   It computes the total sales of a given period, optionally in a given location or in all locations.

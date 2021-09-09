@@ -88,6 +88,7 @@ class Transaction extends AbstractTransaction_1.AbstractTransaction {
             }
             return revenue;
         }
+        // console.log(price);
         if (acct === DataTypes_1.Accounting.PRICE) {
             return price;
         }
