@@ -1,9 +1,9 @@
 import { AbstractTransaction } from "./AbstractTransaction";
 import { Customer } from "./Customer";
-import { PurchaseMethod, Location, Item, Accounting, Level, ItemDictionary, Day, Month } from "./DataTypes";
+import { PurchaseMethod, Location, Item, Accounting, Level, ItemDictionary, Day, Month, TagDictionary } from "./DataTypes";
 import { Product } from "./Product";
 
-export class Transaction extends AbstractTransaction {
+export class  Transaction extends AbstractTransaction {
   constructor(
     protected _customer: Customer,
     protected _products: Product[],
@@ -98,7 +98,7 @@ export class Transaction extends AbstractTransaction {
   /* This function computes the total amount of the transaction with respect to the parameter acct, by adding all the values of the perItem.*/
   total(acct: Accounting, level?: Level): number {
     let total: number = 0;
-    const items: ItemDictionary = this.perItem(acct);
+    const items: ItemDictionary = this.perItem(acct, level);
     for (const property in items) {
       total += items[property];
     }
@@ -113,6 +113,40 @@ export class Transaction extends AbstractTransaction {
     For Accounting.PRICE, it will get the highest/lowest price of the item containing the tag depending on the optional level. 
     */
   perTag(acct: Accounting, level?: Level): TagDictionary {
+    let quantity: TagDictionary = {};
+    let revenue: TagDictionary = {};
+    let price: TagDictionary = {};
+   
+    this._products.forEach(({ tags }) => {
+      tags.forEach((tag) => {
+        if (quantity.hasOwnProperty(tag)) {
+          quantity[tag]++;
+        } else {
+          quantity[tag] = 0;
+        }
+      })  
+    })
+   
+    this._products.forEach(({tags, price}) => {
+      tags.forEach((tag) => {
+        price[tag] = price;
+      })
+    })
+    
+    if (acct === Accounting.REVENUE) {
+      for (const property in quantity) {
+        revenue[property] = quantity[property] * price[property];
+      }
+      return revenue;
+    }
+
+    if (acct === Accounting.QUANTITY) {
+      return quantity;
+    }
+    // TODO return lowest or highest price based on optional level
+    if (acct === Accounting.PRICE) {
+      return price;
+    }
 
   };
 

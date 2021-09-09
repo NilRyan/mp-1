@@ -2,6 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Customer = void 0;
 class Customer {
+    _gender;
+    _age;
+    _email;
     constructor(_gender, _age, _email) {
         this._gender = _gender;
         this._age = _age;

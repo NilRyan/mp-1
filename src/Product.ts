@@ -12,6 +12,10 @@ export class Product {
     return this._price;
   }
 
+  get tags(): Tag[] {
+    return this._tags;
+  }
+
   set tags(tags: Tag[]) {
     this._tags = tags;
   }

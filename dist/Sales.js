@@ -1,0 +1,94 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Sales = void 0;
+const DataTypes_1 = require("./DataTypes");
+class Sales {
+    _sales;
+    constructor(_sales) {
+        this._sales = _sales;
+    }
+    add(transaction) {
+        this._sales.push(transaction);
+    }
+    listLocations() {
+        return [...new Set(this._sales.map((transaction) => transaction.location))];
+    }
+    listTags() {
+        const listOfTags = [
+            ...new Set(this._sales.map((transaction) => transaction.products
+                .map((product) => {
+                return product.tags;
+            })).flat(2)),
+        ].sort();
+        return listOfTags;
+    }
+    listItems() {
+        return [...new Set(this._sales.map((transaction) => transaction.listItems()).flat())];
+    }
+    listPurchaseMethods() {
+        return [...new Set(this._sales.map((transaction) => transaction.purchaseMethod))];
+    }
+    // TODO functions
+    /* This function accepts three required parameters.
+        Depending on the level which is either Level.HIGHEST OR LEVEL.LOWEST,
+        it parses the data to get the highest/lowest price of an item in a given location */
+    getPrice(location, item, level) {
+        const price = this._sales
+            .filter((transaction) => transaction.location === location)
+            .map((transaction) => transaction.perItem(DataTypes_1.Accounting.PRICE, level));
+        return price[0][item];
+    }
+    /* This function accepts one required and one optional parameters.
+      It computes the total sales of a given period, optionally in a given location or in all locations.
+      For the Period.YEARLY, it should output a sorted array of tuples containing years and the corresponding total amount(e.g. [[2001,123456],[2002,123456],[2003,123456]])
+      For the Period.MONTHLY, it should output a sorted array of tuples containing months and the corresponding total amount(e.g. [['Jan',123456],['Feb',123456],['Mar',123456]])
+      For the Period.WEEKLY, it should output a sorted array of tuples containing days of week and the corresponding total amount(e.g. [['Mon','123456'],['Tue',123456],['Wed',123456]])
+      For the Period.ALL, it should output the total amount
+      The order should be chronological: ascending years, Jan-Dec or Sun-Sat
+      The location parameter filters the data for the corresponding location. If unspecified, all branches would be considered.*/
+    getSalesFor(period, location) {
+        let salesFor = {};
+        if (period === DataTypes_1.Period.YEARLY) {
+            const year = this._sales.map((transaction) => [transaction.getYear(), transaction.total(DataTypes_1.Accounting.REVENUE)]);
+            salesFor["yearlySales"] = year;
+            return salesFor;
+        }
+        if (period === DataTypes_1.Period.MONTHLY) {
+            const month = this._sales.map((transaction) => [transaction.getMonth(), transaction.total(DataTypes_1.Accounting.REVENUE)]);
+            salesFor["monthlySales"] = month;
+            return salesFor;
+        }
+        if (period === DataTypes_1.Period.WEEKLY) {
+            const week = this._sales.map((transaction) => [transaction.getDay(), transaction.total(DataTypes_1.Accounting.REVENUE)]);
+            salesFor["weeklySales"] = week;
+            return salesFor;
+        }
+        if (period === DataTypes_1.Period.ALL) {
+            salesFor["all"] = this._sales.map((transaction) => transaction.total(DataTypes_1.Accounting.REVENUE)).reduce((a, b) => a + b);
+            return salesFor;
+        }
+    } // YEARLY = {'yearlySales':[[number, number]]}
+    /* This function accepts two required parameters.
+        Depending on the level which is either Level.HIGHEST OR Level.LOWEST, it computes the highest/lowest revenue with respect to the period.
+        Period can be yearly, monthly or day of the week
+        e.g. getSales(Period.Yearly, Level.HIGHEST) will return the year with the highest sales in a tuple form.
+        e.g. getSales(Period.Weekly, Level.LOWEST) will return the day of the week with the lowest sales in a tuple form.
+        string for month */
+    getSales(period, level) {
+        if (period === DataTypes_1.Period.YEARLY) {
+            let sale = this.getSalesFor(period);
+        }
+        ;
+        if (period === DataTypes_1.Period.WEEKLY) {
+        }
+        return;
+    } // years, month(Jan-Dec), day(Sun-Sat)
+    /* This function accepts two required and one optional parameters.
+        It computes the total sales between the two dates, from and two in a given location.
+        If the location is not specified, it will consider all the branches.
+        The returned value should be a tuple of Date, Date and the total amount in number */
+    getSalesBetween(from, to, location) {
+        return;
+    }
+}
+exports.Sales = Sales;

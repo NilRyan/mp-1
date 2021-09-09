@@ -41,13 +41,13 @@ export type SalesPeriod = Month | number | 'all';
 6. weeklySales - array of tuples of Day and number
 7. all - a number */
 export interface Rank {
-  locations: [string, number][];
-  items: [string, number][];
-  tags: [string, number][];
-  yearlySales: [number, number][];
-  monthlySales: [Month, number][];
-  weeklySales: [Day, number][];
-  all: number;
+  locations?: [string, number][];
+  items?: [string, number][];
+  tags?: [string, number][];
+  yearlySales?: [number, number][];
+  monthlySales?: [Month, number][];
+  weeklySales?: [Day, number][];
+  all?: number;
 }
 
 /* Create an enum Order that has the following elements: 
