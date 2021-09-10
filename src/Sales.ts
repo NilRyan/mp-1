@@ -162,11 +162,12 @@ export abstract class Sales implements Requirements {
   getSalesBetween(from: Date, to: Date, location?: Location): [Date, Date, number] {
     const salesInLocation = location ? this._sales.filter((transaction) => transaction.location === location) : this._sales;
     const salesBetween = salesInLocation.filter((transaction) => {
-      if (transaction.saleDate.getTime() >= from.getTime() && transaction.saleDate.getTime() <= to.getTime()) {
+      const date = new Date(transaction.saleDate).getTime();
+      if (date >= from.getTime() && date <= to.getTime()) {
         return true;
       }
       return false;
-    }).map((transaction) => transaction.total(Accounting.REVENUE)).reduce((a, b) => a + b);
+    }).map((transaction) => transaction.total(Accounting.REVENUE)).reduce((a, b) => a + b, 0);
     return [from, to, salesBetween];
   }
 

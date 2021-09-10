@@ -3,7 +3,7 @@ import { Sales } from "./Sales";
 import { Transaction } from "./Transaction";
 
 export class Analytics extends Sales {
-  constructor(protected _sales: Transaction[]) {
+  constructor( protected _sales: Transaction[]) {
     super(_sales);
   }
   /* Implement these methods in Analytics class */
