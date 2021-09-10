@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Level = exports.Period = exports.Accounting = exports.Order = void 0;
+exports.GenderEnum = exports.Level = exports.Period = exports.Accounting = exports.Order = void 0;
 /* Create an enum Order that has the following elements:
 ASC for smallest to highest order
 DESC for highest to smallest order */
@@ -38,3 +38,8 @@ var Level;
     Level[Level["HIGHEST"] = 0] = "HIGHEST";
     Level[Level["LOWEST"] = 1] = "LOWEST";
 })(Level = exports.Level || (exports.Level = {}));
+var GenderEnum;
+(function (GenderEnum) {
+    GenderEnum["M"] = "M";
+    GenderEnum["F"] = "F";
+})(GenderEnum = exports.GenderEnum || (exports.GenderEnum = {}));

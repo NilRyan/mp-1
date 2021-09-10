@@ -90,3 +90,8 @@ export enum Level {
   HIGHEST,
   LOWEST
 }
+
+export enum GenderEnum {
+  M = 'M',
+  F = 'F'
+}

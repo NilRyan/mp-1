@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Analytics = void 0;
+const DataTypes_1 = require("./DataTypes");
 const Sales_1 = require("./Sales");
 class Analytics extends Sales_1.Sales {
     _sales;
@@ -15,7 +16,34 @@ class Analytics extends Sales_1.Sales {
     This order would be specified by the second parameter which is either Order.ASC(ascending) or Order.DESC(descending).
     The output should be a Rank obj whose property, items containing an array of items */
     rankProductsBy(category, order) {
-        return;
+        let filteredSales;
+        let perItem;
+        let itemQuantity = {};
+        if (category === DataTypes_1.GenderEnum.M) {
+            filteredSales = this._sales.filter((transaction) => transaction.customer.gender === DataTypes_1.GenderEnum.M);
+        }
+        if (category === DataTypes_1.GenderEnum.F) {
+            filteredSales = this._sales.filter((transaction) => transaction.customer.gender === DataTypes_1.GenderEnum.F);
+        }
+        if (typeof category === "boolean") {
+            filteredSales = category ? this._sales.filter((transaction) => transaction.coupon === true) : this._sales.filter((transaction) => transaction.coupon === false);
+        }
+        if (typeof category === "number") {
+            filteredSales = this._sales.filter((transaction) => transaction.customer.age === category);
+            perItem = filteredSales.map((transaction) => {
+                return Object.entries(transaction.perItem(DataTypes_1.Accounting.QUANTITY));
+            }).flat();
+            perItem.forEach((item) => {
+                if (itemQuantity.hasOwnProperty(item[0])) {
+                    itemQuantity[item[0]] += item[1];
+                }
+                else {
+                    itemQuantity[item[0]] = item[1];
+                }
+            });
+        }
+        const sortCallBack = DataTypes_1.Order.ASC === order ? (a, b) => a[1] - b[1] : (a, b) => b[1] - a[1];
+        return { items: Object.entries(itemQuantity).sort(sortCallBack) };
     }
     /* This function accepts two required parameters.
     The category specifies either gender, age or coupon

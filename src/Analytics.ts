@@ -1,4 +1,4 @@
-import { Accounting, AttributesA, AttributesB, Item, Order, Rank } from "./DataTypes";
+import { Accounting, AttributesA, AttributesB, GenderEnum, Item, ItemDictionary, Order, Rank } from "./DataTypes";
 import { Sales } from "./Sales";
 import { Transaction } from "./Transaction";
 
@@ -14,7 +14,34 @@ export class Analytics extends Sales {
     This order would be specified by the second parameter which is either Order.ASC(ascending) or Order.DESC(descending).
     The output should be a Rank obj whose property, items containing an array of items */
   rankProductsBy(category: AttributesA, order: Order): Rank {
-      return
+    let filteredSales: Transaction[];
+    let perItem: [Item, number][];
+    let itemQuantity: ItemDictionary = {};
+    if (category === GenderEnum.M) {
+       filteredSales = this._sales.filter((transaction) => transaction.customer.gender === GenderEnum.M);
+    }
+    if (category === GenderEnum.F) {
+       filteredSales = this._sales.filter((transaction) => transaction.customer.gender === GenderEnum.F);
+    }
+    if (typeof category === "boolean") {
+       filteredSales = category ? this._sales.filter((transaction) => transaction.coupon === true) : this._sales.filter((transaction) => transaction.coupon === false);
+    }
+    if (typeof category === "number") {
+      filteredSales = this._sales.filter((transaction) => transaction.customer.age === category);
+      perItem = filteredSales.map((transaction) => {
+        return Object.entries(transaction.perItem(Accounting.QUANTITY));
+      }).flat() as [Item, number][];
+      perItem.forEach((item) => {
+        if (itemQuantity.hasOwnProperty(item[0])) {
+          itemQuantity[item[0]] += item[1];
+        } else {
+          itemQuantity[item[0]] = item[1];
+        }
+      })
+   
+    }
+    const sortCallBack = Order.ASC === order ? (a, b) => a[1] - b[1] : (a, b) => b[1] - a[1];
+    return { items: Object.entries(itemQuantity).sort(sortCallBack) };
     }
 
     /* This function accepts two required parameters.

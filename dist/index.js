@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Parser_1 = require("./Parser");
 const Transaction_1 = require("./Transaction");
+const DataTypes_1 = require("./DataTypes");
 const Analytics_1 = require("./Analytics");
 const readline = require('readline');
 const fs = require('fs');
@@ -39,7 +40,8 @@ readInterface.on('line', function (line) {
     // console.log(a.getSales(Period.YEARLY, Level.LOWEST));
     // console.log(a.getSales(Period.MONTHLY, Level.LOWEST));
     // console.log(a.getSales(Period.WEEKLY, Level.LOWEST));
-    console.log(a.getSalesBetween(new Date("2013-10-06T22:39:37.868Z"), new Date("2016-01-20T17:29:10.225Z")));
+    // console.log(a.getSalesBetween(new Date("2013-10-06T22:39:37.868Z"), new Date("2016-01-20T17:29:10.225Z")));
+    console.log(a.rankProductsBy(23, DataTypes_1.Order.ASC));
     //console.log(a.medianAge('notepad'))
     // console.log(2)
     // console.log(new Set(item.map((i) => i.name))); // Item
