@@ -15,6 +15,8 @@ class Analytics extends Sales_1.Sales {
     Under this category, the products would be ranked based on a given order.
     This order would be specified by the second parameter which is either Order.ASC(ascending) or Order.DESC(descending).
     The output should be a Rank obj whose property, items containing an array of items */
+    //* Same patterns from transaction were used to create a tuple of items containing quantities
+    //* Used GenderEnums for gender
     rankProductsBy(category, order) {
         let filteredSales;
         let perItem;
@@ -30,18 +32,18 @@ class Analytics extends Sales_1.Sales {
         }
         if (typeof category === "number") {
             filteredSales = this._sales.filter((transaction) => transaction.customer.age === category);
-            perItem = filteredSales.map((transaction) => {
-                return Object.entries(transaction.perItem(DataTypes_1.Accounting.QUANTITY));
-            }).flat();
-            perItem.forEach((item) => {
-                if (itemQuantity.hasOwnProperty(item[0])) {
-                    itemQuantity[item[0]] += item[1];
-                }
-                else {
-                    itemQuantity[item[0]] = item[1];
-                }
-            });
         }
+        perItem = filteredSales.map((transaction) => {
+            return Object.entries(transaction.perItem(DataTypes_1.Accounting.QUANTITY));
+        }).flat();
+        perItem.forEach((item) => {
+            if (itemQuantity.hasOwnProperty(item[0])) {
+                itemQuantity[item[0]] += item[1];
+            }
+            else {
+                itemQuantity[item[0]] = item[1];
+            }
+        });
         const sortCallBack = DataTypes_1.Order.ASC === order ? (a, b) => a[1] - b[1] : (a, b) => b[1] - a[1];
         return { items: Object.entries(itemQuantity).sort(sortCallBack) };
     }
