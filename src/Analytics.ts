@@ -15,24 +15,12 @@ export class Analytics extends Sales {
     The output should be a Rank obj whose property, items containing an array of items */
   
   //* Same patterns from transaction were used to create a tuple of items containing quantities
-  //* Used GenderEnums for gender
+  //* Used GenderEnums for gender, Utilized a funciton filterByCategory to abstract filtering
   rankProductsBy(category: AttributesA, order: Order): Rank {
-    let filteredSales: Transaction[];
+    let filteredSales: Transaction[] = this.filterByCategory(category);
     let perItem: [Item, number][];
     let itemQuantity: ItemDictionary = {};
-    if (category === GenderEnum.M) {
-       filteredSales = this._sales.filter((transaction) => transaction.customer.gender === GenderEnum.M);
-    }
-    if (category === GenderEnum.F) {
-       filteredSales = this._sales.filter((transaction) => transaction.customer.gender === GenderEnum.F);
-    }
-    if (typeof category === "boolean") {
-       filteredSales = category ? this._sales.filter((transaction) => transaction.coupon === true) : this._sales.filter((transaction) => transaction.coupon === false);
-    }
-    if (typeof category === "number") {
-      filteredSales = this._sales.filter((transaction) => transaction.customer.age === category);
-   
-    }
+    
     perItem = filteredSales.map((transaction) => {
       return Object.entries(transaction.perItem(Accounting.QUANTITY));
     }).flat() as [Item, number][];
@@ -52,8 +40,14 @@ export class Analytics extends Sales {
     Under this category, the products would be ranked based on a given order.
     This order would be specified by the second parameter which is either Order.ASC(ascending) or Order.DESC(descending).
     The output should be a Rank obj whose property, locations containing an array of tuples, [<locations>,<number>] */
+  // TODO -> might need to refactor filtering of sales because there is a lot of copy paste
+  //** Used a filterByCategory function to abstract filtering */
   rankLocationSatisfactionBy(category: AttributesA, order: Order): Rank | undefined {
-      return
+    let filteredSales = this.filterByCategory(category);
+    console.log(filteredSales);
+    
+    const sortCallBack = Order.ASC === order ? (a, b) => a[1] - b[1] : (a, b) => b[1] - a[1];
+    return 
     }
 
     /* This function accepts two required parameters and an optional one.
@@ -73,5 +67,23 @@ export class Analytics extends Sales {
     Another example, medianAge('Denver') will return the median age of the customers who bought in Denver branch */
   medianAge(category: AttributesB): number | undefined {
       return
+  }
+  
+  filterByCategory(category: AttributesA): Transaction[] {
+    let filteredSales: Transaction[];
+    if (category === GenderEnum.M) {
+       filteredSales = this._sales.filter((transaction) => transaction.customer.gender === GenderEnum.M);
     }
+    if (category === GenderEnum.F) {
+       filteredSales = this._sales.filter((transaction) => transaction.customer.gender === GenderEnum.F);
+    }
+    if (typeof category === "boolean") {
+       filteredSales = category ? this._sales.filter((transaction) => transaction.coupon === true) : this._sales.filter((transaction) => transaction.coupon === false);
+    }
+    if (typeof category === "number") {
+      filteredSales = this._sales.filter((transaction) => transaction.customer.age === category);
+  
+    }
+    return filteredSales;
+  }
 }
