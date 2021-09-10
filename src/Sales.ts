@@ -158,8 +158,16 @@ export abstract class Sales implements Requirements {
       It computes the total sales between the two dates, from and two in a given location.
       If the location is not specified, it will consider all the branches.
       The returned value should be a tuple of Date, Date and the total amount in number */
+  //* Use Date.getTime() method to compare numerical values of dates,
   getSalesBetween(from: Date, to: Date, location?: Location): [Date, Date, number] {
-    return
+    const salesInLocation = location ? this._sales.filter((transaction) => transaction.location === location) : this._sales;
+    const salesBetween = salesInLocation.filter((transaction) => {
+      if (transaction.saleDate.getTime() >= from.getTime() && transaction.saleDate.getTime() <= to.getTime()) {
+        return true;
+      }
+      return false;
+    }).map((transaction) => transaction.total(Accounting.REVENUE)).reduce((a, b) => a + b);
+    return [from, to, salesBetween];
   }
 
 
