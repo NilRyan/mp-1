@@ -44,9 +44,18 @@ class Analytics extends Sales_1.Sales {
     //** Used a filterByCategory function to abstract filtering */
     rankLocationSatisfactionBy(category, order) {
         let filteredSales = this.filterByCategory(category);
-        console.log(filteredSales);
+        let locQuantity = {};
+        filteredSales.forEach((transaction) => {
+            if (locQuantity.hasOwnProperty(transaction.location)) {
+                locQuantity[transaction.location] += 1;
+            }
+            else {
+                locQuantity[transaction.location] = 1;
+            }
+        });
+        console.log(locQuantity);
         const sortCallBack = DataTypes_1.Order.ASC === order ? (a, b) => a[1] - b[1] : (a, b) => b[1] - a[1];
-        return;
+        return { locations: Object.entries(locQuantity).sort(sortCallBack) };
     }
     /* This function accepts two required parameters and an optional one.
     The acct specifies either Accounting.QUANTITY, Accounting.REVENUE or Accounting.PRICE

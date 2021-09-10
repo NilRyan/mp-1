@@ -27,7 +27,7 @@ export type TagDictionary = {
   [tagName in Tag]?: number;
 };
 export type LocDictionary = {
-  [locationName in Location]: number;
+  [locationName in Location]?: number;
 };
 export type SalesPeriod = Month | number | 'all';
 

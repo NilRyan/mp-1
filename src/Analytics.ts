@@ -1,4 +1,4 @@
-import { Accounting, AttributesA, AttributesB, GenderEnum, Item, ItemDictionary, Order, Rank } from "./DataTypes";
+import { Accounting, AttributesA, AttributesB, GenderEnum, Item, ItemDictionary, LocDictionary, Order, Rank } from "./DataTypes";
 import { Sales } from "./Sales";
 import { Transaction } from "./Transaction";
 
@@ -44,10 +44,19 @@ export class Analytics extends Sales {
   //** Used a filterByCategory function to abstract filtering */
   rankLocationSatisfactionBy(category: AttributesA, order: Order): Rank | undefined {
     let filteredSales = this.filterByCategory(category);
-    console.log(filteredSales);
+    let locQuantity: LocDictionary = {};
+    filteredSales.forEach((transaction) => {
+      if (locQuantity.hasOwnProperty(transaction.location)) {
+        locQuantity[transaction.location] += 1;
+      } else {
+        locQuantity[transaction.location] = 1;
+      }
+    })
+    console.log(locQuantity);
     
     const sortCallBack = Order.ASC === order ? (a, b) => a[1] - b[1] : (a, b) => b[1] - a[1];
-    return 
+    return { locations: Object.entries(locQuantity).sort(sortCallBack) };
+    
     }
 
     /* This function accepts two required parameters and an optional one.
