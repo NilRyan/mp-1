@@ -9,7 +9,7 @@ export class  Transaction extends AbstractTransaction {
      _products: Product[],
      _location: Location,
      _saleDate: Date,
-    _satisfaction: number,
+     _satisfaction: number,
      _coupon: boolean,
      _purchaseMethod: PurchaseMethod
   ) {

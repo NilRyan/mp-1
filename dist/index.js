@@ -15,16 +15,16 @@ let item = [];
 let tags = [];
 let locations = [];
 let purchaseMeth = [];
-let a = new Analytics_1.Analytics([]);
+const a = new Analytics_1.Analytics([]);
 readInterface.on('line', function (line) {
-    let obj = JSON.parse(line);
+    const obj = JSON.parse(line);
     // console.log(...obj.items);
     // console.log(obj);
     item.push(...obj.items);
     tags.push(...obj.items);
     locations.push(obj.storeLocation);
     purchaseMeth.push(obj.purchaseMethod);
-    let t = new Transaction_1.Transaction(Parser_1.Parser.getCustomer(obj), Parser_1.Parser.getProducts(obj), Parser_1.Parser.getLocation(obj), Parser_1.Parser.getDate(obj), Parser_1.Parser.getSatisfaction(obj), Parser_1.Parser.getCoupon(obj), Parser_1.Parser.getPurchaseMethod(obj));
+    const t = new Transaction_1.Transaction(Parser_1.Parser.getCustomer(obj), Parser_1.Parser.getProducts(obj), Parser_1.Parser.getLocation(obj), Parser_1.Parser.getDate(obj), Parser_1.Parser.getSatisfaction(obj), Parser_1.Parser.getCoupon(obj), Parser_1.Parser.getPurchaseMethod(obj));
     // console.log(t);
     a.add(t);
 }).on('close', function (line) {
@@ -43,9 +43,9 @@ readInterface.on('line', function (line) {
     // console.log(a.getSalesBetween(new Date("2013-10-06T22:39:37.868Z"), new Date("2016-01-20T17:29:10.225Z")));
     // console.log(a.rankProductsBy(true, Order.DESC));.
     // console.log(a.rankLocationSatisfactionBy(true, Order.DESC));
-    console.log(a.rankLocationBy(DataTypes_1.Accounting.QUANTITY, DataTypes_1.Order.ASC));
-    console.log(a.rankLocationBy(DataTypes_1.Accounting.REVENUE, DataTypes_1.Order.DESC));
-    console.log(a.rankLocationBy(DataTypes_1.Accounting.PRICE, DataTypes_1.Order.DESC));
+    // console.log(a.rankLocationBy(Accounting.QUANTITY, Order.ASC));
+    // console.log(a.rankLocationBy(Accounting.REVENUE, Order.DESC));
+    console.log(a.rankLocationBy(DataTypes_1.Accounting.PRICE, DataTypes_1.Order.DESC, 'binder'));
     //console.log(a.medianAge('notepad'))
     // console.log(2)
     // console.log(new Set(item.map((i) => i.name))); // Item

@@ -17,10 +17,10 @@ let item = [];
 let tags = [];
 let locations = [];
 let purchaseMeth = [];
-let a: Requirements = new Analytics([])
+const a: Requirements = new Analytics([])
 readInterface.on('line', function(line) {
  
-  let obj: any = JSON.parse(line)
+  const obj: any = JSON.parse(line)
   // console.log(...obj.items);
   // console.log(obj);
   item.push(...obj.items);
@@ -29,7 +29,7 @@ readInterface.on('line', function(line) {
   purchaseMeth.push(obj.purchaseMethod)
 
 
-  let t: AbstractTransaction = new Transaction(Parser.getCustomer(obj), Parser.getProducts(obj),
+  const t: AbstractTransaction = new Transaction(Parser.getCustomer(obj), Parser.getProducts(obj),
     Parser.getLocation(obj), Parser.getDate(obj),
     Parser.getSatisfaction(obj), Parser.getCoupon(obj),
     Parser.getPurchaseMethod(obj));
@@ -51,9 +51,9 @@ readInterface.on('line', function(line) {
   // console.log(a.getSalesBetween(new Date("2013-10-06T22:39:37.868Z"), new Date("2016-01-20T17:29:10.225Z")));
   // console.log(a.rankProductsBy(true, Order.DESC));.
   // console.log(a.rankLocationSatisfactionBy(true, Order.DESC));
-  console.log(a.rankLocationBy(Accounting.QUANTITY, Order.ASC));
-  console.log(a.rankLocationBy(Accounting.REVENUE, Order.DESC));
-  console.log(a.rankLocationBy(Accounting.PRICE, Order.DESC));
+  // console.log(a.rankLocationBy(Accounting.QUANTITY, Order.ASC));
+  // console.log(a.rankLocationBy(Accounting.REVENUE, Order.DESC));
+  console.log(a.rankLocationBy(Accounting.PRICE, Order.DESC, 'binder'));
   //console.log(a.medianAge('notepad'))
   // console.log(2)
   // console.log(new Set(item.map((i) => i.name))); // Item

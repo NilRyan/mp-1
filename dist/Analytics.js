@@ -53,15 +53,14 @@ class Analytics extends Sales_1.Sales {
                 locQuantity[transaction.location] = 1;
             }
         });
-        console.log(locQuantity);
-        const sortCallBack = DataTypes_1.Order.ASC === order ? (a, b) => a[1] - b[1] : (a, b) => b[1] - a[1];
-        return { locations: Object.entries(locQuantity).sort(sortCallBack) };
+        return { locations: Object.entries(locQuantity).sort(this.sortCallBack(order)) };
     }
     /* This function accepts two required parameters and an optional one.
     The acct specifies either Accounting.QUANTITY, Accounting.REVENUE or Accounting.PRICE
     For Accounting.QUANTITY, the locations will be ranked based on the total quantity being sold regardless of which items.
     For Accounting.REVENUE, the locations will be ranked based on the revenue as computed by the sum of the products of price and quantity for each item.
     For Accounting.PRICE, the locations will be ranked based on the highest/lowest price of the given sold product as specified by the order.
+    !item param is only for price?
     The order would be determine by the second parameter which is either Order.ASC(ascending) or Order.DESC(descending).
     The output should be a Rank obj whose property, locations containing an array of tuples, [<locations>,<number>]*/
     rankLocationBy(acct, order, item) {
@@ -87,17 +86,19 @@ class Analytics extends Sales_1.Sales {
             });
         }
         if (acct === DataTypes_1.Accounting.PRICE) {
-            this._sales.map((transaction) => [transaction.location, transaction.total(acct)]).forEach((loc) => {
+            this._sales.map((transaction) => {
+                const price = transaction.perItem(acct)[item] ? transaction.perItem(acct)[item] : 0;
+                return [transaction.location, price];
+            }).forEach((loc) => {
                 if (locQuantity.hasOwnProperty(loc[0])) {
-                    locQuantity[loc[0]] += Number(loc[1]);
+                    locQuantity[loc[0]] = locQuantity[loc[0]] < Number(loc[1]) ? loc[1] : locQuantity[loc[0]];
                 }
                 else {
                     locQuantity[loc[0]] = Number(loc[1]);
                 }
             });
         }
-        const sortCallBack = DataTypes_1.Order.ASC === order ? (a, b) => a[1] - b[1] : (a, b) => b[1] - a[1];
-        return { locations: Object.entries(locQuantity).sort(sortCallBack) };
+        return { locations: Object.entries(locQuantity).sort(this.sortCallBack(order)) };
     }
     /* This function accepts one required parameter.
     It computes the median of the age with respect to the Item, Location, PurchaseMethod or Gender
@@ -105,6 +106,9 @@ class Analytics extends Sales_1.Sales {
     Another example, medianAge('Denver') will return the median age of the customers who bought in Denver branch */
     medianAge(category) {
         return;
+    }
+    sortCallBack(order) {
+        return DataTypes_1.Order.ASC === order ? (a, b) => a[1] - b[1] : (a, b) => b[1] - a[1];
     }
     filterByCategory(category) {
         let filteredSales;
