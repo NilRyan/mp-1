@@ -11,13 +11,35 @@
 // Create a type alias, TagDictionary which is an object whose optional keys are the string literal types of Tag and their corresponding values are of number type
 // Create a type alias, LocDictionary which is an object whose optional keys are the string literal types of Location and their corresponding values are of number type
 // Create a type alias, SalesPeriod which is the union type of Month, Day, number and 'All'
-export type Gender = 'M' | 'F';
-export type Item = 'printer paper' | 'envelopes' | 'notepad' | 'backpack' | 'pens' | 'binder' | 'laptop';
-export type Tag = 'office' | 'stationary' | 'writing' | 'school' | 'travel' | 'kids' | 'general' | 'organization' | 'electronics';
-export type Location = 'Denver' | 'Seattle' | 'London' | 'Austin' | 'New York' | 'San Diego';
-export type PurchaseMethod = 'Online' | 'Phone' | 'In store';
-export type Month = 'Jan' | 'Feb' | 'Mar' | 'Apr' | 'May' | 'June' | 'Jul' | 'Aug' | 'Sep' | 'Oct' | 'Nov' | 'Dec';
-export type Day = 'Mon' | 'Tue' | 'Wed' | 'Thu' | 'Fri' | 'Sat' | 'Sun';
+const Gender = ['M', 'F'] as const;
+export const Genders: Gender[] = ['M', 'F'];
+export type Gender = typeof Gender[number];
+
+const Item = ['printer paper', 'envelopes', 'notepad', 'backpack', 'pens', 'binder', 'laptop'] as const;
+export const Items: Item[] = ['printer paper', 'envelopes', 'notepad', 'backpack', 'pens', 'binder', 'laptop'];
+export type Item = typeof Item[number];
+
+const Tag = ['office', 'stationary', 'writing', 'school', 'travel', 'kids', 'general', 'organization', 'electronics'] as const;
+export const Tags: Tag[] = ['office', 'stationary', 'writing', 'school', 'travel', 'kids', 'general', 'organization', 'electronics'];
+export type Tag = typeof Tag[number];
+
+
+const Location = ['Denver', 'Seattle', 'London', 'Austin', 'New York', 'San Diego'] as const;
+export const Locations: Location[] = ['Denver', 'Seattle', 'London', 'Austin', 'New York', 'San Diego'];
+export type Location = typeof Location[number];
+
+const PurchaseMethod = ['Online', 'Phone', 'In store'] as const;
+export const PurchaseMethods: PurchaseMethod[] = ['Online', 'Phone', 'In store'];
+export type PurchaseMethod = typeof PurchaseMethod[number];
+
+const Month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] as const;
+export const Months: Month[] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+export type Month = typeof Month[number];
+
+const Day = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] as const;
+export const Days: Day[] = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+export type Day = typeof Day[number];
+
 export type AttributesA = Gender | number | boolean;
 export type AttributesB = Item | Location | PurchaseMethod | Gender;
 export type ItemDictionary = {
@@ -30,6 +52,14 @@ export type LocDictionary = {
   [locationName in Location]?: number;
 };
 export type SalesPeriod = Month | number | 'all';
+
+/* //*Use a function with a generic type to determine if an inputted value is of Type
+  //*I did this because I cannot use typeof for type aliases, only primitives have the capability to use typeof
+  //*This is due to type aliases not existing at runtime
+  //*As a work around we can use this function that finds out if the value is of type using an array */
+export function isType<T>(value: T, compare: T[]): value is T {
+  return compare.includes(value as unknown as T);
+}
 
 
 /* Write an interface, Rank which has the following optional properties:

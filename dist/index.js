@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Parser_1 = require("./Parser");
 const Transaction_1 = require("./Transaction");
-const DataTypes_1 = require("./DataTypes");
 const Analytics_1 = require("./Analytics");
 const readline = require('readline');
 const fs = require('fs');
@@ -45,7 +44,8 @@ readInterface.on('line', function (line) {
     // console.log(a.rankLocationSatisfactionBy(true, Order.DESC));
     // console.log(a.rankLocationBy(Accounting.QUANTITY, Order.ASC));
     // console.log(a.rankLocationBy(Accounting.REVENUE, Order.DESC));
-    console.log(a.rankLocationBy(DataTypes_1.Accounting.PRICE, DataTypes_1.Order.DESC, 'binder'));
+    // console.log(a.rankLocationBy(Accounting.PRICE, Order.DESC, 'binder'));
+    console.log(a.medianAge('notepad'));
     //console.log(a.medianAge('notepad'))
     // console.log(2)
     // console.log(new Set(item.map((i) => i.name))); // Item

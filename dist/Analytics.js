@@ -61,6 +61,7 @@ class Analytics extends Sales_1.Sales {
     For Accounting.REVENUE, the locations will be ranked based on the revenue as computed by the sum of the products of price and quantity for each item.
     For Accounting.PRICE, the locations will be ranked based on the highest/lowest price of the given sold product as specified by the order.
     !item param is only for price?
+    !undefined needs to be handled
     The order would be determine by the second parameter which is either Order.ASC(ascending) or Order.DESC(descending).
     The output should be a Rank obj whose property, locations containing an array of tuples, [<locations>,<number>]*/
     rankLocationBy(acct, order, item) {
@@ -106,6 +107,13 @@ class Analytics extends Sales_1.Sales {
     Another example, medianAge('Denver') will return the median age of the customers who bought in Denver branch */
     medianAge(category) {
         return;
+    }
+    median(numbers) {
+        let median = 0;
+        let numsLen = numbers.length;
+        numbers.sort();
+        numsLen % 2 === 0 ? median = (numbers[numsLen / 2 - 1] + numbers[numsLen / 2]) / 2 : median = numbers[(numsLen - 1) / 2];
+        return median;
     }
     sortCallBack(order) {
         return DataTypes_1.Order.ASC === order ? (a, b) => a[1] - b[1] : (a, b) => b[1] - a[1];
