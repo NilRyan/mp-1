@@ -42,7 +42,10 @@ readInterface.on('line', function (line) {
     // console.log(a.getSales(Period.WEEKLY, Level.LOWEST));
     // console.log(a.getSalesBetween(new Date("2013-10-06T22:39:37.868Z"), new Date("2016-01-20T17:29:10.225Z")));
     // console.log(a.rankProductsBy(true, Order.DESC));.
-    console.log(a.rankLocationSatisfactionBy(true, DataTypes_1.Order.DESC));
+    // console.log(a.rankLocationSatisfactionBy(true, Order.DESC));
+    console.log(a.rankLocationBy(DataTypes_1.Accounting.QUANTITY, DataTypes_1.Order.ASC));
+    console.log(a.rankLocationBy(DataTypes_1.Accounting.REVENUE, DataTypes_1.Order.DESC));
+    console.log(a.rankLocationBy(DataTypes_1.Accounting.PRICE, DataTypes_1.Order.DESC));
     //console.log(a.medianAge('notepad'))
     // console.log(2)
     // console.log(new Set(item.map((i) => i.name))); // Item

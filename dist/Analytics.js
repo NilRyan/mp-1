@@ -65,7 +65,39 @@ class Analytics extends Sales_1.Sales {
     The order would be determine by the second parameter which is either Order.ASC(ascending) or Order.DESC(descending).
     The output should be a Rank obj whose property, locations containing an array of tuples, [<locations>,<number>]*/
     rankLocationBy(acct, order, item) {
-        return;
+        let locQuantity = {};
+        if (acct === DataTypes_1.Accounting.QUANTITY) {
+            this._sales.map((transaction) => [transaction.location, transaction.total(acct)]).forEach((loc) => {
+                if (locQuantity.hasOwnProperty(loc[0])) {
+                    locQuantity[loc[0]] += Number(loc[1]);
+                }
+                else {
+                    locQuantity[loc[0]] = Number(loc[1]);
+                }
+            });
+        }
+        if (acct === DataTypes_1.Accounting.REVENUE) {
+            this._sales.map((transaction) => [transaction.location, transaction.total(acct)]).forEach((loc) => {
+                if (locQuantity.hasOwnProperty(loc[0])) {
+                    locQuantity[loc[0]] += Number(loc[1]);
+                }
+                else {
+                    locQuantity[loc[0]] = Number(loc[1]);
+                }
+            });
+        }
+        if (acct === DataTypes_1.Accounting.PRICE) {
+            this._sales.map((transaction) => [transaction.location, transaction.total(acct)]).forEach((loc) => {
+                if (locQuantity.hasOwnProperty(loc[0])) {
+                    locQuantity[loc[0]] += Number(loc[1]);
+                }
+                else {
+                    locQuantity[loc[0]] = Number(loc[1]);
+                }
+            });
+        }
+        const sortCallBack = DataTypes_1.Order.ASC === order ? (a, b) => a[1] - b[1] : (a, b) => b[1] - a[1];
+        return { locations: Object.entries(locQuantity).sort(sortCallBack) };
     }
     /* This function accepts one required parameter.
     It computes the median of the age with respect to the Item, Location, PurchaseMethod or Gender

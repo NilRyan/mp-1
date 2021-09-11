@@ -67,7 +67,38 @@ export class Analytics extends Sales {
     The order would be determine by the second parameter which is either Order.ASC(ascending) or Order.DESC(descending).
     The output should be a Rank obj whose property, locations containing an array of tuples, [<locations>,<number>]*/
   rankLocationBy(acct: Accounting, order: Order, item?: Item): Rank | undefined {
-      return
+    let locQuantity: LocDictionary = {}
+    if (acct === Accounting.QUANTITY) {
+      this._sales.map((transaction) => [transaction.location, transaction.total(acct)]).forEach((loc) => {
+        if (locQuantity.hasOwnProperty(loc[0])) {
+          locQuantity[loc[0]] += Number(loc[1]);
+        } else {
+          locQuantity[loc[0]] = Number(loc[1]);
+        }
+      });
+    }
+    if (acct === Accounting.REVENUE) {
+      this._sales.map((transaction) => [transaction.location, transaction.total(acct)]).forEach((loc) => {
+        if (locQuantity.hasOwnProperty(loc[0])) {
+          locQuantity[loc[0]] += Number(loc[1]);
+        } else {
+          locQuantity[loc[0]] = Number(loc[1]);
+        }
+      });
+    }
+
+    if (acct === Accounting.PRICE) {
+      this._sales.map((transaction) => [transaction.location, transaction.total(acct)]).forEach((loc) => {
+        if (locQuantity.hasOwnProperty(loc[0])) {
+          locQuantity[loc[0]] += Number(loc[1]);
+        } else {
+          locQuantity[loc[0]] = Number(loc[1]);
+        }
+      });
+    }
+   
+    const sortCallBack = Order.ASC === order ? (a, b) => a[1] - b[1] : (a, b) => b[1] - a[1];
+    return { locations: Object.entries(locQuantity).sort(sortCallBack) };
     }
 
     /* This function accepts one required parameter.

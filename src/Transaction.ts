@@ -112,7 +112,7 @@ export class  Transaction extends AbstractTransaction {
     let total: number = 0;
     const items: ItemDictionary = this.perItem(acct, level);
     for (const property in items) {
-      total += items[property];
+      total += Number(items[property]);
     }
     return total;
   };

@@ -98,7 +98,7 @@ class Transaction extends AbstractTransaction_1.AbstractTransaction {
         let total = 0;
         const items = this.perItem(acct, level);
         for (const property in items) {
-            total += items[property];
+            total += Number(items[property]);
         }
         return total;
     }
