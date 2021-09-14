@@ -37,10 +37,8 @@ export class Analytics extends Sales {
   //* Used GenderEnums for gender, Utilized a funciton filterByCategory to abstract filtering
   rankProductsBy(category: AttributesA, order: Order): Rank {
     const filteredSales: Transaction[] = this.filterByCategory(category);
-    let perItem: [Item, number][];
     const itemQuantity: ItemDictionary = {};
-
-    perItem = filteredSales
+    const perItem: [Item, number][] = filteredSales
       .map((transaction) => {
         return Object.entries(transaction.perItem(Accounting.REVENUE));
       })

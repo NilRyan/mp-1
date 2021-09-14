@@ -1,17 +1,27 @@
 import { AbstractTransaction } from "./AbstractTransaction";
 import { Customer } from "./Customer";
-import { PurchaseMethod, Location, Item, Accounting, Level, ItemDictionary, Day, Month, TagDictionary } from "./DataTypes";
+import {
+  PurchaseMethod,
+  Location,
+  Item,
+  Accounting,
+  Level,
+  ItemDictionary,
+  Day,
+  Month,
+  TagDictionary,
+} from "./DataTypes";
 import { Product } from "./Product";
 
-export class  Transaction extends AbstractTransaction {
+export class Transaction extends AbstractTransaction {
   constructor(
-     _customer: Customer,
-     _products: Product[],
-     _location: Location,
-     _saleDate: Date,
-     _satisfaction: number,
-     _coupon: boolean,
-     _purchaseMethod: PurchaseMethod
+    _customer: Customer,
+    _products: Product[],
+    _location: Location,
+    _saleDate: Date,
+    _satisfaction: number,
+    _coupon: boolean,
+    _purchaseMethod: PurchaseMethod
   ) {
     super(
       _customer,
@@ -62,49 +72,56 @@ export class  Transaction extends AbstractTransaction {
     For Accounting.REVENUE, it will collect all the revenue(price * quantity) per item.
     For Accounting.PRICE, it will collect all the price per item.
     e.g. {'notepad':123,'laptop':345} */
-  // TODO implement the level 
+  // TODO implement the level
   perItem(acct: Accounting, level?: Level): ItemDictionary {
     const quantity: ItemDictionary = {};
     const revenue: ItemDictionary = {};
     const price: ItemDictionary = {};
-    
-    //* Used forEach to count quantity of an item in the Product[]
-    this._products.forEach((product) => {
-        if (quantity.hasOwnProperty(product.item)) {
-          quantity[product.item]++;
-        } else {
-          quantity[product.item] = 1;
-        }
-    })
-    
+
     //* Used forEach to determine the prices of each item, a product array can have
     //* multiple items with the same name and different prices
     //* Will implement level to determine highest or lowest prices in the item dictionary
     //! Implemented highest prices as default for now
     this._products.forEach((product) => {
-      if (price.hasOwnProperty(product.item)) {
-        price[product.item] = price[product.item] < product.price ? product.price : price[product.item];
+      if (quantity[product.item] !== undefined) {
+        if (Level.HIGHEST === level) {
+          price[product.item] = price[product.item] < product.price ? product.price : price[product.item];
+        }
+
+        if (Level.LOWEST === level) {
+          price[product.item] = price[product.item] < product.price ? price[product.item] : product.price;
+        }
       } else {
         price[product.item] = product.price;
       }
-    })
+    });
     // console.log(price);
-  
+
     if (acct === Accounting.REVENUE) {
-      for (const property in quantity) {
-        revenue[property] = quantity[property] * price[property];
-      }
+      this._products.forEach((product) => {
+        if (quantity[product.item] !== undefined) {
+          quantity[product.item] += product.price * product.quantity;
+        } else {
+          quantity[product.item] = product.price * product.quantity;
+        }
+      });
       return revenue;
     }
-   
-  
+
     if (acct === Accounting.PRICE) {
       return price;
     }
     if (acct === Accounting.QUANTITY) {
+      //* Used forEach to count quantity of an item in the Product[]
+      this._products.forEach((product) => {
+        if (quantity[product.item] !== undefined) {
+          quantity[product.item] += product.price;
+        } else {
+          quantity[product.item] = product.price;
+        }
+      });
       return quantity;
     }
-  
   }
 
   /* This function computes the total amount of the transaction with respect to the parameter acct, by adding all the values of the perItem.*/
@@ -128,23 +145,23 @@ export class  Transaction extends AbstractTransaction {
     const quantity: TagDictionary = {};
     const revenue: TagDictionary = {};
     const price: TagDictionary = {};
-   
+
     this._products.forEach(({ tags }) => {
       tags.forEach((tag) => {
-        if (quantity.hasOwnProperty(tag)) {
+        if (quantity[tag] !== undefined) {
           quantity[tag]++;
         } else {
           quantity[tag] = 1;
         }
-      })  
-    })
-   
-    this._products.forEach(({tags, price}) => {
+      });
+    });
+
+    this._products.forEach(({ tags, price }) => {
       tags.forEach((tag) => {
         price[tag] = price;
-      })
-    })
-    
+      });
+    });
+
     if (acct === Accounting.REVENUE) {
       for (const property in quantity) {
         revenue[property] = quantity[property] * price[property];
@@ -159,7 +176,6 @@ export class  Transaction extends AbstractTransaction {
     if (acct === Accounting.PRICE) {
       return price;
     }
-
   }
 
   // This function gets the day of the week given of the date(e.g. 'Mon', 'Tue', etc.)
@@ -176,11 +192,4 @@ export class  Transaction extends AbstractTransaction {
   getMonth(): Month {
     return new Date(this._saleDate).toDateString().split(" ")[1] as Month;
   }
-
-   
-
-    
-  }
-
-  
-
+}

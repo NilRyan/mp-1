@@ -44,27 +44,23 @@ class Transaction extends AbstractTransaction_1.AbstractTransaction {
       For Accounting.REVENUE, it will collect all the revenue(price * quantity) per item.
       For Accounting.PRICE, it will collect all the price per item.
       e.g. {'notepad':123,'laptop':345} */
-    // TODO implement the level 
+    // TODO implement the level
     perItem(acct, level) {
         const quantity = {};
         const revenue = {};
         const price = {};
-        //* Used forEach to count quantity of an item in the Product[]
-        this._products.forEach((product) => {
-            if (quantity.hasOwnProperty(product.item)) {
-                quantity[product.item]++;
-            }
-            else {
-                quantity[product.item] = 1;
-            }
-        });
         //* Used forEach to determine the prices of each item, a product array can have
         //* multiple items with the same name and different prices
         //* Will implement level to determine highest or lowest prices in the item dictionary
         //! Implemented highest prices as default for now
         this._products.forEach((product) => {
-            if (price.hasOwnProperty(product.item)) {
-                price[product.item] = price[product.item] < product.price ? product.price : price[product.item];
+            if (quantity[product.item] !== undefined) {
+                if (DataTypes_1.Level.HIGHEST === level) {
+                    price[product.item] = price[product.item] < product.price ? product.price : price[product.item];
+                }
+                if (DataTypes_1.Level.LOWEST === level) {
+                    price[product.item] = price[product.item] < product.price ? price[product.item] : product.price;
+                }
             }
             else {
                 price[product.item] = product.price;
@@ -72,15 +68,29 @@ class Transaction extends AbstractTransaction_1.AbstractTransaction {
         });
         // console.log(price);
         if (acct === DataTypes_1.Accounting.REVENUE) {
-            for (const property in quantity) {
-                revenue[property] = quantity[property] * price[property];
-            }
+            this._products.forEach((product) => {
+                if (quantity[product.item] !== undefined) {
+                    quantity[product.item] += product.price * product.quantity;
+                }
+                else {
+                    quantity[product.item] = product.price * product.quantity;
+                }
+            });
             return revenue;
         }
         if (acct === DataTypes_1.Accounting.PRICE) {
             return price;
         }
         if (acct === DataTypes_1.Accounting.QUANTITY) {
+            //* Used forEach to count quantity of an item in the Product[]
+            this._products.forEach((product) => {
+                if (quantity[product.item] !== undefined) {
+                    quantity[product.item] += product.price;
+                }
+                else {
+                    quantity[product.item] = product.price;
+                }
+            });
             return quantity;
         }
     }
@@ -106,7 +116,7 @@ class Transaction extends AbstractTransaction_1.AbstractTransaction {
         const price = {};
         this._products.forEach(({ tags }) => {
             tags.forEach((tag) => {
-                if (quantity.hasOwnProperty(tag)) {
+                if (quantity[tag] !== undefined) {
                     quantity[tag]++;
                 }
                 else {
