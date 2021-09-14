@@ -62,24 +62,31 @@ export class Analytics extends Sales {
     Under this category, the products would be ranked based on a given order using satisfaction rate average.
     This order would be specified by the second parameter which is either Order.ASC(ascending) or Order.DESC(descending).
     The output should be a Rank obj whose property, locations containing an array of tuples, [<locations>,<number>] */
-  // TODO -> might need to refactor filtering of sales because there is a lot of copy paste
+  // TODONE -> might need to refactor filtering of sales because there is a lot of copy paste 
   //** Used a filterByCategory function to abstract filtering */
   rankLocationSatisfactionBy(
     category: AttributesA,
     order: Order
   ): Rank {
     const filteredSales = this.filterByCategory(category);
-    const locQuantity: LocDictionary = {};
+    const locTotalSatisfaction: LocDictionary = {};
+    const locCustomerCount: LocDictionary = {};
+    const locAvgSatisfaction: LocDictionary = {};
     filteredSales.forEach((transaction) => {
-      if (locQuantity[transaction.location] !== undefined) {
-        locQuantity[transaction.location] += 1;
+      if (locTotalSatisfaction[transaction.location] !== undefined) {
+        locTotalSatisfaction[transaction.location] += transaction.satisfaction;
+        locCustomerCount[transaction.location] += 1;
       } else {
-        locQuantity[transaction.location] = 1;
+        locTotalSatisfaction[transaction.location] = transaction.satisfaction;
+        locCustomerCount[transaction.location] = 1;
       }
     });
+    for (const location in locTotalSatisfaction) {
+      locAvgSatisfaction[location] = locTotalSatisfaction[location] / locCustomerCount[location];
+    }
 
     return {
-      locations: Object.entries(locQuantity).sort(this.sortCallBack(order)),
+      locations: Object.entries(locAvgSatisfaction).sort(this.sortCallBack(order)),
     };
   }
 
