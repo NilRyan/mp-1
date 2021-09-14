@@ -49,46 +49,45 @@ class Transaction extends AbstractTransaction_1.AbstractTransaction {
         const quantity = {};
         const revenue = {};
         const price = {};
-        //* Used forEach to determine the prices of each item, a product array can have
-        //* multiple items with the same name and different prices
-        //* Will implement level to determine highest or lowest prices in the item dictionary
-        //! Implemented highest prices as default for now
-        this._products.forEach((product) => {
-            if (quantity[product.item] !== undefined) {
-                if (DataTypes_1.Level.HIGHEST === level) {
-                    price[product.item] = price[product.item] < product.price ? product.price : price[product.item];
-                }
-                if (DataTypes_1.Level.LOWEST === level) {
-                    price[product.item] = price[product.item] < product.price ? price[product.item] : product.price;
-                }
-            }
-            else {
-                price[product.item] = product.price;
-            }
-        });
-        // console.log(price);
         if (acct === DataTypes_1.Accounting.REVENUE) {
             this._products.forEach((product) => {
-                if (quantity[product.item] !== undefined) {
-                    quantity[product.item] += product.price * product.quantity;
+                if (revenue[product.item] !== undefined) {
+                    revenue[product.item] += product.price * product.quantity;
                 }
                 else {
-                    quantity[product.item] = product.price * product.quantity;
+                    revenue[product.item] = product.price * product.quantity;
                 }
             });
             return revenue;
         }
         if (acct === DataTypes_1.Accounting.PRICE) {
+            //* Used forEach to determine the prices of each item, a product array can have
+            //* multiple items with the same name and different prices
+            //* Will implement level to determine highest or lowest prices in the item dictionary
+            //! Implemented highest prices as default for now
+            this._products.forEach((product) => {
+                if (price[product.item] !== undefined) {
+                    if (DataTypes_1.Level.HIGHEST === level) {
+                        price[product.item] = price[product.item] < product.price ? product.price : price[product.item];
+                    }
+                    if (DataTypes_1.Level.LOWEST === level) {
+                        price[product.item] = price[product.item] < product.price ? price[product.item] : product.price;
+                    }
+                }
+                else {
+                    price[product.item] = product.price;
+                }
+            });
             return price;
         }
         if (acct === DataTypes_1.Accounting.QUANTITY) {
             //* Used forEach to count quantity of an item in the Product[]
             this._products.forEach((product) => {
                 if (quantity[product.item] !== undefined) {
-                    quantity[product.item] += product.price;
+                    quantity[product.item] += product.quantity;
                 }
                 else {
-                    quantity[product.item] = product.price;
+                    quantity[product.item] = product.quantity;
                 }
             });
             return quantity;
@@ -111,36 +110,54 @@ class Transaction extends AbstractTransaction_1.AbstractTransaction {
       For Accounting.PRICE, it will get the highest/lowest price of the item containing the tag depending on the optional level.
       */
     perTag(acct, level) {
-        const quantity = {};
+        const quantities = {};
         const revenue = {};
-        const price = {};
-        this._products.forEach(({ tags }) => {
-            tags.forEach((tag) => {
-                if (quantity[tag] !== undefined) {
-                    quantity[tag]++;
-                }
-                else {
-                    quantity[tag] = 1;
-                }
-            });
-        });
-        this._products.forEach(({ tags, price }) => {
-            tags.forEach((tag) => {
-                price[tag] = price;
-            });
-        });
-        if (acct === DataTypes_1.Accounting.REVENUE) {
-            for (const property in quantity) {
-                revenue[property] = quantity[property] * price[property];
-            }
-            return revenue;
-        }
+        const prices = {};
         if (acct === DataTypes_1.Accounting.QUANTITY) {
-            return quantity;
+            this._products.forEach(({ tags, quantity }) => {
+                tags.forEach((tag) => {
+                    if (quantities[tag] !== undefined) {
+                        quantities[tag] += quantity;
+                    }
+                    else {
+                        quantities[tag] = quantity;
+                    }
+                });
+            });
+            return quantities;
         }
         // TODO return lowest or highest price based on optional level
         if (acct === DataTypes_1.Accounting.PRICE) {
-            return price;
+            this._products.forEach(({ tags, price }) => {
+                tags.forEach((tag) => {
+                    prices[tag] = price;
+                    if (prices[tag] !== undefined) {
+                        if (DataTypes_1.Level.HIGHEST === level) {
+                            prices[tag] = prices[tag] < price ? price : prices[tag];
+                        }
+                        if (DataTypes_1.Level.LOWEST === level) {
+                            price[tag] = prices[tag] < prices ? prices[tag] : prices;
+                        }
+                    }
+                    else {
+                        prices[tag] = price;
+                    }
+                });
+            });
+            return prices;
+        }
+        if (acct === DataTypes_1.Accounting.REVENUE) {
+            this._products.forEach(({ tags, quantity, price }) => {
+                tags.forEach((tag) => {
+                    if (revenue[tag] !== undefined) {
+                        revenue[tag] += quantity * price;
+                    }
+                    else {
+                        revenue[tag] = quantity * price;
+                    }
+                });
+            });
+            return revenue;
         }
     }
     // This function gets the day of the week given of the date(e.g. 'Mon', 'Tue', etc.)

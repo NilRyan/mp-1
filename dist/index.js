@@ -24,19 +24,18 @@ readInterface.on('line', function (line) {
     locations.push(obj.storeLocation);
     purchaseMeth.push(obj.purchaseMethod);
     const t = new Transaction_1.Transaction(Parser_1.Parser.getCustomer(obj), Parser_1.Parser.getProducts(obj), Parser_1.Parser.getLocation(obj), Parser_1.Parser.getDate(obj), Parser_1.Parser.getSatisfaction(obj), Parser_1.Parser.getCoupon(obj), Parser_1.Parser.getPurchaseMethod(obj));
-    // console.log(t);
     a.add(t);
 }).on('close', function (line) {
     // console.log(a.listItems());
     // console.log(a.listLocations());
     // console.log(a.listPurchaseMethods());
     // console.log(a.listTags());
-    // console.log(a.getPrice('Denver', 'notepad', Level.HIGHEST));
+    // console.log(a.getPrice('Denver', 'notepad', Level.LOWEST));
     // console.log(a.getSalesFor(Period.ALL));
     // console.log(a.getSalesFor(Period.YEARLY));
     // console.log(a.getSalesFor(Period.MONTHLY));
     // console.log(a.getSalesFor(Period.WEEKLY));
-    // console.log(a.getSales(Period.YEARLY, Level.LOWEST));
+    // console.log(a.getSales(Period.YEARLY, Level.HIGHEST));
     // console.log(a.getSales(Period.MONTHLY, Level.LOWEST));
     // console.log(a.getSales(Period.WEEKLY, Level.LOWEST));
     // console.log(a.getSalesBetween(new Date("2013-10-06T22:39:37.868Z"), new Date("2016-01-20T17:29:10.225Z")));

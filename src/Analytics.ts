@@ -9,6 +9,7 @@ import {
   Item,
   ItemDictionary,
   Items,
+  Level,
   Location,
   Locations,
   LocDictionary,
@@ -44,7 +45,7 @@ export class Analytics extends Sales {
       })
       .flat() as [Item, number][];
     perItem.forEach((item) => {
-      if (itemQuantity.hasOwnProperty(item[0])) {
+      if (itemQuantity[item[0]] !== undefined) {
         itemQuantity[item[0]] += item[1];
       } else {
         itemQuantity[item[0]] = item[1];
@@ -70,7 +71,7 @@ export class Analytics extends Sales {
     const filteredSales = this.filterByCategory(category);
     const locQuantity: LocDictionary = {};
     filteredSales.forEach((transaction) => {
-      if (locQuantity.hasOwnProperty(transaction.location)) {
+      if (locQuantity[transaction.location] !== undefined) {
         locQuantity[transaction.location] += 1;
       } else {
         locQuantity[transaction.location] = 1;
@@ -99,11 +100,12 @@ export class Analytics extends Sales {
     item?: Item
   ): Rank | undefined {
     const locQuantity: LocDictionary = {};
+    const level = order === Order.ASC ? Level.LOWEST : Level.HIGHEST;
     if (acct === Accounting.QUANTITY) {
       this._sales
         .map((transaction) => [transaction.location, transaction.total(acct)])
         .forEach((loc) => {
-          if (locQuantity.hasOwnProperty(loc[0])) {
+          if (locQuantity[loc[0]] !== undefined) {
             locQuantity[loc[0]] += Number(loc[1]);
           } else {
             locQuantity[loc[0]] = Number(loc[1]);
@@ -114,7 +116,7 @@ export class Analytics extends Sales {
       this._sales
         .map((transaction) => [transaction.location, transaction.total(acct)])
         .forEach((loc) => {
-          if (locQuantity.hasOwnProperty(loc[0])) {
+          if (locQuantity[loc[0]] !== undefined) {
             locQuantity[loc[0]] += Number(loc[1]);
           } else {
             locQuantity[loc[0]] = Number(loc[1]);
@@ -131,11 +133,13 @@ export class Analytics extends Sales {
           return [transaction.location, price];
         })
         .forEach((loc) => {
-          if (locQuantity.hasOwnProperty(loc[0])) {
-            locQuantity[loc[0]] =
-              locQuantity[loc[0]] < Number(loc[1])
-                ? loc[1]
-                : locQuantity[loc[0]];
+          if (locQuantity[loc[0]] !== undefined) {
+            if (level === Level.HIGHEST) {
+              locQuantity[loc[0]] = locQuantity[loc[0]] < Number(loc[1]) ? loc[1] : locQuantity[loc[0]];
+            }
+            if (level === Level.LOWEST) {
+              locQuantity[loc[0]] = locQuantity[loc[0]] < Number(loc[1]) ? locQuantity[loc[0]] : loc[1] ;
+            }
           } else {
             locQuantity[loc[0]] = Number(loc[1]);
           }

@@ -80,10 +80,10 @@ export class Transaction extends AbstractTransaction {
 
     if (acct === Accounting.REVENUE) {
       this._products.forEach((product) => {
-        if (quantity[product.item] !== undefined) {
-          quantity[product.item] += product.price * product.quantity;
+        if (revenue[product.item] !== undefined) {
+          revenue[product.item] += product.price * product.quantity;
         } else {
-          quantity[product.item] = product.price * product.quantity;
+          revenue[product.item] = product.price * product.quantity;
         }
       });
       return revenue;
@@ -95,7 +95,7 @@ export class Transaction extends AbstractTransaction {
       //* Will implement level to determine highest or lowest prices in the item dictionary
       //! Implemented highest prices as default for now
       this._products.forEach((product) => {
-        if (quantity[product.item] !== undefined) {
+        if (price[product.item] !== undefined) {
           if (Level.HIGHEST === level) {
             price[product.item] = price[product.item] < product.price ? product.price : price[product.item];
           }
@@ -184,10 +184,10 @@ export class Transaction extends AbstractTransaction {
     if (acct === Accounting.REVENUE) {
       this._products.forEach(({ tags, quantity, price }) => {
         tags.forEach((tag) => {
-          if (quantities[tag] !== undefined) {
-            quantities[tag] += quantity * price;
+          if (revenue[tag] !== undefined) {
+            revenue[tag] += quantity * price;
           } else {
-            quantities[tag] = quantity * price;
+            revenue[tag] = quantity * price;
           }
         });
       });
