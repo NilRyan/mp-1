@@ -10,10 +10,10 @@ const readInterface = readline.createInterface({
     output: null,
     console: false
 });
-let item = [];
-let tags = [];
-let locations = [];
-let purchaseMeth = [];
+const item = [];
+const tags = [];
+const locations = [];
+const purchaseMeth = [];
 const a = new Analytics_1.Analytics([]);
 readInterface.on('line', function (line) {
     const obj = JSON.parse(line);
@@ -45,7 +45,7 @@ readInterface.on('line', function (line) {
     // console.log(a.rankLocationBy(Accounting.QUANTITY, Order.ASC));
     // console.log(a.rankLocationBy(Accounting.REVENUE, Order.DESC));
     // console.log(a.rankLocationBy(Accounting.PRICE, Order.DESC, 'binder'));
-    console.log(a.medianAge('notepad'));
+    // console.log(a.medianAge("F"));
     //console.log(a.medianAge('notepad'))
     // console.log(2)
     // console.log(new Set(item.map((i) => i.name))); // Item
@@ -56,3 +56,5 @@ readInterface.on('line', function (line) {
     // console.log(new Set(locations));
     // console.log(new Set(purchaseMeth));
 });
+// console.log(purchaseMeth)
+console.log(3);

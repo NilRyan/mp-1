@@ -6,9 +6,9 @@ export class Parser {
     return obj.customer;
   }
   static getProducts(obj: any): Product[] {
-    let products = [];
+    const products = [];
     obj.items.forEach((item) => {
-      let product = new Product(item.name, item.price.$numberDecimal);
+      const product = new Product(item.name, item.price.$numberDecimal);
       product.tags = item.tags;
       products.push(product);
     })

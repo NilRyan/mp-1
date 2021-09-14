@@ -1,7 +1,7 @@
 import { Gender } from "./DataTypes";
 
 export class Customer {
-  constructor(private _gender: Gender, private _age: number, private _email: string) { };
+  constructor(private _gender: Gender, private _age: number, private _email: string) { }
 
   get gender(): Gender {
     return this._gender;

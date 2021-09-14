@@ -10,7 +10,6 @@ class Customer {
         this._age = _age;
         this._email = _email;
     }
-    ;
     get gender() {
         return this._gender;
     }

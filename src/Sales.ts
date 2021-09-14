@@ -1,4 +1,4 @@
-import { Accounting, AttributesA, AttributesB, Item, Level, Order, Rank, Location, Period, Month, Day } from "./DataTypes";
+import { Accounting, AttributesA, AttributesB, Item, Level, Order, Rank, Location, Period, Month, Day, Tag, PurchaseMethod } from "./DataTypes";
 import { Requirements } from "./Requirements";
 import { Transaction } from "./Transaction";
 
@@ -8,10 +8,10 @@ export abstract class Sales implements Requirements {
   add(transaction: Transaction): void {
     this._sales.push(transaction);
   }
-  listLocations() {
+  listLocations(): Location[] {
     return [...new Set(this._sales.map((transaction) => transaction.location))].sort();
   }
-  listTags() {
+  listTags(): Tag[] {
     const listOfTags = [
       ...new Set(
         this._sales.map((transaction) =>
@@ -25,10 +25,10 @@ export abstract class Sales implements Requirements {
     ].sort();
     return listOfTags;
   }
-  listItems() {
+  listItems(): Item[] {
     return [...new Set(this._sales.map((transaction) => transaction.listItems()).flat())].sort();
   }
-  listPurchaseMethods() {
+  listPurchaseMethods(): PurchaseMethod[] {
     return [...new Set(this._sales.map((transaction) => transaction.purchaseMethod))].sort();
   }
   /* This function accepts three required parameters. 
@@ -36,7 +36,7 @@ export abstract class Sales implements Requirements {
   it parses the data to get the highest/lowest price of an item in a given location */
   //* Used nested forEach to determine the max or minimum price
   getPrice(location: Location, item: Item, level: Level): number{
-    let prices: number[] = [];
+    const prices: number[] = [];
     this._sales
       .forEach((transaction) => {
         if (transaction.location === location) {
@@ -59,13 +59,13 @@ export abstract class Sales implements Requirements {
   The order should be chronological: ascending years, Jan-Dec or Sun-Sat
   The location parameter filters the data for the corresponding location. If unspecified, all branches would be considered.*/
   getSalesFor(period: Period, location?: Location): Rank {
-    let salesFor: Rank = {};
-    let sales = location ? this._sales.filter((transaction) => transaction.location === location) : this._sales;
+    const salesFor: Rank = {};
+    const sales = location ? this._sales.filter((transaction) => transaction.location === location) : this._sales;
 
     if (period === Period.YEARLY) {
       const year = sales.map((transaction) => [transaction.getYear(), transaction.total(Accounting.REVENUE)] as [number, number]).sort();
       const yearlySales = [...new Set(year.map((el) => el[0]))].map((el) => {
-        let sale: [number, number] = [el, 0];
+        const sale: [number, number] = [el, 0];
         year.forEach((year) => {
           if (year[0] === el) {
             sale[1] += year[1];
@@ -82,7 +82,7 @@ export abstract class Sales implements Requirements {
     if (period === Period.MONTHLY) {
       const month = sales.map((transaction) => [transaction.getMonth(), transaction.total(Accounting.REVENUE)] as [Month, number]);
       const monthlySales = [...new Set(month.map((el) => el[0]))].map((el) => {
-        let sale: [Month, number] = [el, 0];
+        const sale: [Month, number] = [el, 0];
           month.forEach((month) => {
           if (month[0] === el) {
             sale[1] += month[1];
@@ -101,7 +101,7 @@ export abstract class Sales implements Requirements {
     if (period === Period.WEEKLY) {
       const week = sales.map((transaction) => [transaction.getDay(), transaction.total(Accounting.REVENUE)] as [Day, number]);
       const weeklySales = [...new Set(week.map((el) => el[0]))].map((el) => {
-        let sale: [Day, number] = [el, 0];
+        const sale: [Day, number] = [el, 0];
           week.forEach((week) => {
           if (week[0] === el) {
             sale[1] += week[1];

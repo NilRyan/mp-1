@@ -33,7 +33,7 @@ class Sales {
     it parses the data to get the highest/lowest price of an item in a given location */
     //* Used nested forEach to determine the max or minimum price
     getPrice(location, item, level) {
-        let prices = [];
+        const prices = [];
         this._sales
             .forEach((transaction) => {
             if (transaction.location === location) {
@@ -56,12 +56,12 @@ class Sales {
       The order should be chronological: ascending years, Jan-Dec or Sun-Sat
       The location parameter filters the data for the corresponding location. If unspecified, all branches would be considered.*/
     getSalesFor(period, location) {
-        let salesFor = {};
-        let sales = location ? this._sales.filter((transaction) => transaction.location === location) : this._sales;
+        const salesFor = {};
+        const sales = location ? this._sales.filter((transaction) => transaction.location === location) : this._sales;
         if (period === DataTypes_1.Period.YEARLY) {
             const year = sales.map((transaction) => [transaction.getYear(), transaction.total(DataTypes_1.Accounting.REVENUE)]).sort();
             const yearlySales = [...new Set(year.map((el) => el[0]))].map((el) => {
-                let sale = [el, 0];
+                const sale = [el, 0];
                 year.forEach((year) => {
                     if (year[0] === el) {
                         sale[1] += year[1];
@@ -75,7 +75,7 @@ class Sales {
         if (period === DataTypes_1.Period.MONTHLY) {
             const month = sales.map((transaction) => [transaction.getMonth(), transaction.total(DataTypes_1.Accounting.REVENUE)]);
             const monthlySales = [...new Set(month.map((el) => el[0]))].map((el) => {
-                let sale = [el, 0];
+                const sale = [el, 0];
                 month.forEach((month) => {
                     if (month[0] === el) {
                         sale[1] += month[1];
@@ -92,7 +92,7 @@ class Sales {
         if (period === DataTypes_1.Period.WEEKLY) {
             const week = sales.map((transaction) => [transaction.getDay(), transaction.total(DataTypes_1.Accounting.REVENUE)]);
             const weeklySales = [...new Set(week.map((el) => el[0]))].map((el) => {
-                let sale = [el, 0];
+                const sale = [el, 0];
                 week.forEach((week) => {
                     if (week[0] === el) {
                         sale[1] += week[1];

@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint . --ext .ts",
+    "lint": "eslint . --fix --ext .ts",
     "dev": "tsc-watch --onsuccess \"node dist/index.js\""
   },
   "keywords": [],

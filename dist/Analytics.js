@@ -11,6 +11,7 @@ class Analytics extends Sales_1.Sales {
     }
     /* Implement these methods in Analytics class */
     /* This function accepts two required parameters.
+      //* RANK BASED ON REVENUE
       The category specifies either gender, age or coupon
       Under this category, the products would be ranked based on a given order.
       This order would be specified by the second parameter which is either Order.ASC(ascending) or Order.DESC(descending).
@@ -18,12 +19,12 @@ class Analytics extends Sales_1.Sales {
     //* Same patterns from transaction were used to create a tuple of items containing quantities
     //* Used GenderEnums for gender, Utilized a funciton filterByCategory to abstract filtering
     rankProductsBy(category, order) {
-        let filteredSales = this.filterByCategory(category);
+        const filteredSales = this.filterByCategory(category);
         let perItem;
-        let itemQuantity = {};
+        const itemQuantity = {};
         perItem = filteredSales
             .map((transaction) => {
-            return Object.entries(transaction.perItem(DataTypes_1.Accounting.QUANTITY));
+            return Object.entries(transaction.perItem(DataTypes_1.Accounting.REVENUE));
         })
             .flat();
         perItem.forEach((item) => {
@@ -39,14 +40,15 @@ class Analytics extends Sales_1.Sales {
     }
     /* This function accepts two required parameters.
       The category specifies either gender, age or coupon
-      Under this category, the products would be ranked based on a given order.
+      //* RANK BASED ON AVG SATISFACTION
+      Under this category, the products would be ranked based on a given order using satisfaction rate average.
       This order would be specified by the second parameter which is either Order.ASC(ascending) or Order.DESC(descending).
       The output should be a Rank obj whose property, locations containing an array of tuples, [<locations>,<number>] */
     // TODO -> might need to refactor filtering of sales because there is a lot of copy paste
     //** Used a filterByCategory function to abstract filtering */
     rankLocationSatisfactionBy(category, order) {
-        let filteredSales = this.filterByCategory(category);
-        let locQuantity = {};
+        const filteredSales = this.filterByCategory(category);
+        const locQuantity = {};
         filteredSales.forEach((transaction) => {
             if (locQuantity.hasOwnProperty(transaction.location)) {
                 locQuantity[transaction.location] += 1;
@@ -66,10 +68,12 @@ class Analytics extends Sales_1.Sales {
       For Accounting.PRICE, the locations will be ranked based on the highest/lowest price of the given sold product as specified by the order.
       !item param is only for price?
       !undefined needs to be handled
+      //* ORDER.ASC - use lowest price level
+      //* ORDER.DESC - use highest price level
       The order would be determine by the second parameter which is either Order.ASC(ascending) or Order.DESC(descending).
       The output should be a Rank obj whose property, locations containing an array of tuples, [<locations>,<number>]*/
     rankLocationBy(acct, order, item) {
-        let locQuantity = {};
+        const locQuantity = {};
         if (acct === DataTypes_1.Accounting.QUANTITY) {
             this._sales
                 .map((transaction) => [transaction.location, transaction.total(acct)])
@@ -155,7 +159,7 @@ class Analytics extends Sales_1.Sales {
     }
     median(numbers) {
         let median = 0;
-        let numsLen = numbers.length;
+        const numsLen = numbers.length;
         numbers.sort();
         numsLen % 2 === 0
             ? (median = (numbers[numsLen / 2 - 1] + numbers[numsLen / 2]) / 2)

@@ -9,9 +9,11 @@ import {
   Item,
   ItemDictionary,
   Items,
+  Location,
   Locations,
   LocDictionary,
   Order,
+  PurchaseMethod,
   PurchaseMethods,
   Rank,
 } from "./DataTypes";
@@ -25,6 +27,7 @@ export class Analytics extends Sales {
   /* Implement these methods in Analytics class */
 
   /* This function accepts two required parameters.
+    //* RANK BASED ON REVENUE
     The category specifies either gender, age or coupon
     Under this category, the products would be ranked based on a given order.
     This order would be specified by the second parameter which is either Order.ASC(ascending) or Order.DESC(descending).
@@ -33,13 +36,13 @@ export class Analytics extends Sales {
   //* Same patterns from transaction were used to create a tuple of items containing quantities
   //* Used GenderEnums for gender, Utilized a funciton filterByCategory to abstract filtering
   rankProductsBy(category: AttributesA, order: Order): Rank {
-    let filteredSales: Transaction[] = this.filterByCategory(category);
+    const filteredSales: Transaction[] = this.filterByCategory(category);
     let perItem: [Item, number][];
-    let itemQuantity: ItemDictionary = {};
+    const itemQuantity: ItemDictionary = {};
 
     perItem = filteredSales
       .map((transaction) => {
-        return Object.entries(transaction.perItem(Accounting.QUANTITY));
+        return Object.entries(transaction.perItem(Accounting.REVENUE));
       })
       .flat() as [Item, number][];
     perItem.forEach((item) => {
@@ -56,7 +59,8 @@ export class Analytics extends Sales {
 
   /* This function accepts two required parameters.
     The category specifies either gender, age or coupon
-    Under this category, the products would be ranked based on a given order.
+    //* RANK BASED ON AVG SATISFACTION
+    Under this category, the products would be ranked based on a given order using satisfaction rate average.
     This order would be specified by the second parameter which is either Order.ASC(ascending) or Order.DESC(descending).
     The output should be a Rank obj whose property, locations containing an array of tuples, [<locations>,<number>] */
   // TODO -> might need to refactor filtering of sales because there is a lot of copy paste
@@ -64,9 +68,9 @@ export class Analytics extends Sales {
   rankLocationSatisfactionBy(
     category: AttributesA,
     order: Order
-  ): Rank | undefined {
-    let filteredSales = this.filterByCategory(category);
-    let locQuantity: LocDictionary = {};
+  ): Rank {
+    const filteredSales = this.filterByCategory(category);
+    const locQuantity: LocDictionary = {};
     filteredSales.forEach((transaction) => {
       if (locQuantity.hasOwnProperty(transaction.location)) {
         locQuantity[transaction.location] += 1;
@@ -87,6 +91,8 @@ export class Analytics extends Sales {
     For Accounting.PRICE, the locations will be ranked based on the highest/lowest price of the given sold product as specified by the order.
     !item param is only for price?
     !undefined needs to be handled
+    //* ORDER.ASC - use lowest price level 
+    //* ORDER.DESC - use highest price level
     The order would be determine by the second parameter which is either Order.ASC(ascending) or Order.DESC(descending).
     The output should be a Rank obj whose property, locations containing an array of tuples, [<locations>,<number>]*/
   rankLocationBy(
@@ -94,7 +100,7 @@ export class Analytics extends Sales {
     order: Order,
     item?: Item
   ): Rank | undefined {
-    let locQuantity: LocDictionary = {};
+    const locQuantity: LocDictionary = {};
     if (acct === Accounting.QUANTITY) {
       this._sales
         .map((transaction) => [transaction.location, transaction.total(acct)])
@@ -158,33 +164,32 @@ export class Analytics extends Sales {
     }
     if (isType<AttributesB>(category, Locations)) {
       ages = this._sales
-        .filter((transaction) => transaction.location === category)
+        .filter((transaction) => transaction.location === category as Location)
         .map((transaction) => transaction.customer.age);
     }
     if (isType<AttributesB>(category, PurchaseMethods)) {
       ages = this._sales
-        .filter((transaction) => transaction.purchaseMethod === category)
+        .filter((transaction) => transaction.purchaseMethod === category as PurchaseMethod)
         .map((transaction) => transaction.customer.age);
     }
     if (isType<AttributesB>(category, Genders)) {
       if (category === 'M') {
         ages = this._sales
-          .filter((transaction) => transaction.customer.gender === 'M')
+          .filter((transaction) => transaction.customer.gender === 'M' as Gender)
           .map((transaction) => transaction.customer.age);
       }
       if (category === 'F') {
         ages = this._sales
-          .filter((transaction) => transaction.customer.gender === 'F')
+          .filter((transaction) => transaction.customer.gender === 'F' as Gender)
           .map((transaction) => transaction.customer.age);
       }
     }
-
     return this.median(ages);
   }
 
   median(numbers: number[]): number {
     let median = 0;
-    let numsLen = numbers.length;
+    const numsLen = numbers.length;
     numbers.sort();
 
     numsLen % 2 === 0

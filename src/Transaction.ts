@@ -26,36 +26,36 @@ export class  Transaction extends AbstractTransaction {
   // This function is a getter for the products
   get products(): Product[] {
     return this._products;
-  };
+  }
   // This function is a getter for the location
   get location(): Location {
     return this._location;
-  };
+  }
   // This function is a getter for the saleDate
   get saleDate(): Date {
     return this._saleDate;
-  };
+  }
   // This function is a getter for the customer
   get customer(): Customer {
     return this._customer;
-  };
+  }
   // This function is a getter for the coupon
   get coupon(): boolean {
     return this._coupon;
-  };
+  }
   // This function is a getter for the purchaseMethod
   get purchaseMethod(): PurchaseMethod {
     return this._purchaseMethod;
-  };
+  }
   // This function is a getter for the satisfaction
   get satisfaction(): number {
     return this._satisfaction;
-  };
+  }
 
   /* This function returns an array of items being sold in this transaction in an alphabetical order*/
   listItems(): Item[] {
     return this._products.map((product) => product.item).sort();
-  };
+  }
 
   /* This function accepts one required parameter(either Accounting.QUANTITY, Accounting.REVENUE or Accounting.PRICE) and an optional one(Level.HIGHEST or Level.LOWEST).
     For Accounting.QUANTITY, it will collect all the quantity per item.
@@ -64,9 +64,9 @@ export class  Transaction extends AbstractTransaction {
     e.g. {'notepad':123,'laptop':345} */
   // TODO implement the level 
   perItem(acct: Accounting, level?: Level): ItemDictionary {
-    let quantity: ItemDictionary = {};
-    let revenue: ItemDictionary = {};
-    let price: ItemDictionary = {};
+    const quantity: ItemDictionary = {};
+    const revenue: ItemDictionary = {};
+    const price: ItemDictionary = {};
     
     //* Used forEach to count quantity of an item in the Product[]
     this._products.forEach((product) => {
@@ -88,8 +88,8 @@ export class  Transaction extends AbstractTransaction {
         price[product.item] = product.price;
       }
     })
+    // console.log(price);
   
-    
     if (acct === Accounting.REVENUE) {
       for (const property in quantity) {
         revenue[property] = quantity[property] * price[property];
@@ -97,25 +97,25 @@ export class  Transaction extends AbstractTransaction {
       return revenue;
     }
    
-    // console.log(price);
-    
+  
     if (acct === Accounting.PRICE) {
       return price;
     }
     if (acct === Accounting.QUANTITY) {
       return quantity;
     }
-  };
+  
+  }
 
   /* This function computes the total amount of the transaction with respect to the parameter acct, by adding all the values of the perItem.*/
   total(acct: Accounting, level?: Level): number {
-    let total: number = 0;
+    let total = 0;
     const items: ItemDictionary = this.perItem(acct, level);
     for (const property in items) {
       total += Number(items[property]);
     }
     return total;
-  };
+  }
 
   /* This function accepts one required parameter(either Accounting.QUANTITY, Accounting.REVENUE or Accounting.PRICE) and an optional one(Level.HIGHEST or Level.LOWEST)
     It computes the values for all the tags existing in this transaction.
@@ -125,9 +125,9 @@ export class  Transaction extends AbstractTransaction {
     For Accounting.PRICE, it will get the highest/lowest price of the item containing the tag depending on the optional level. 
     */
   perTag(acct: Accounting, level?: Level): TagDictionary {
-    let quantity: TagDictionary = {};
-    let revenue: TagDictionary = {};
-    let price: TagDictionary = {};
+    const quantity: TagDictionary = {};
+    const revenue: TagDictionary = {};
+    const price: TagDictionary = {};
    
     this._products.forEach(({ tags }) => {
       tags.forEach((tag) => {
@@ -160,22 +160,22 @@ export class  Transaction extends AbstractTransaction {
       return price;
     }
 
-  };
+  }
 
   // This function gets the day of the week given of the date(e.g. 'Mon', 'Tue', etc.)
   getDay(): Day {
     return new Date(this._saleDate).toDateString().split(" ")[0] as Day;
-  };
+  }
 
   // This function gets the year of the given date(e.g. 2020, 2021, etc.)
   getYear(): number {
     return Number(new Date(this._saleDate).toDateString().split(" ")[3]);
-  };
+  }
 
   // This function gets the month of the given date(e.g. 'Jan', 'Feb', 'Mar' etc.)
   getMonth(): Month {
     return new Date(this._saleDate).toDateString().split(" ")[1] as Month;
-  };
+  }
 
    
 
