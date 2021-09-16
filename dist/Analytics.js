@@ -23,7 +23,7 @@ class Analytics extends Sales_1.Sales {
         const itemQuantity = {};
         const perItem = filteredSales
             .map((transaction) => {
-            return Object.entries(transaction.perItem(DataTypes_1.Accounting.REVENUE));
+            return Object.entries(transaction.perItem(DataTypes_1.Accounting.QUANTITY));
         })
             .flat();
         perItem.forEach((item) => {

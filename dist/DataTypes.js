@@ -26,8 +26,8 @@ const PurchaseMethod = ['Online', 'Phone', 'In store'];
 exports.PurchaseMethods = ['Online', 'Phone', 'In store'];
 const Month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 exports.Months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-const Day = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-exports.Days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+const Day = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+exports.Days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat',];
 /* //*Use a function with a generic type to determine if an inputted value is of Type
   //*I did this because I cannot use typeof for type aliases, only primitives have the capability to use typeof
   //*This is due to type aliases not existing at runtime

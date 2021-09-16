@@ -100,19 +100,14 @@ class Sales {
                 });
                 return sale;
             });
-            const weekLookUp = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+            const weekLookUp = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
             salesFor["weeklySales"] = weekLookUp.map((week) => {
                 return [week, weeklySales.find((m) => m[0] === week)[1]];
             });
-            salesFor["weeklySales"] = weeklySales;
             return salesFor;
         }
         if (period === DataTypes_1.Period.ALL) {
             salesFor["all"] = sales.map((transaction) => {
-                // console.log(transaction.products);
-                // console.log(transaction.total(Accounting.PRICE));
-                // console.log(transaction.total(Accounting.QUANTITY));
-                // console.log(transaction.total(Accounting.REVENUE));
                 return transaction.total(DataTypes_1.Accounting.REVENUE);
             }).reduce((a, b) => a + b);
             return salesFor;
@@ -146,7 +141,7 @@ class Sales {
         const salesInLocation = location ? this._sales.filter((transaction) => transaction.location === location) : this._sales;
         const salesBetween = salesInLocation.filter((transaction) => {
             const date = new Date(transaction.saleDate).getTime();
-            if (date >= from.getTime() && date <= to.getTime()) {
+            if (date >= from.getTime() && date < to.getTime()) {
                 return true;
             }
             return false;

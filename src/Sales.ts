@@ -110,20 +110,15 @@ export abstract class Sales implements Requirements {
         });
         return sale;
       });
-      const weekLookUp = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+      const weekLookUp = ['Sun','Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
       salesFor["weeklySales"] = weekLookUp.map((week) => {
         return [week as Day, weeklySales.find((m) => m[0] === week)[1]];
       });
-      salesFor["weeklySales"] = weeklySales;
       return salesFor;
     }
 
     if (period === Period.ALL) {
       salesFor["all"] = sales.map((transaction) => {
-        // console.log(transaction.products);
-        // console.log(transaction.total(Accounting.PRICE));
-        // console.log(transaction.total(Accounting.QUANTITY));
-        // console.log(transaction.total(Accounting.REVENUE));
         return transaction.total(Accounting.REVENUE)
       }).reduce((a, b) => a + b);
       return salesFor;
@@ -160,10 +155,12 @@ export abstract class Sales implements Requirements {
       The returned value should be a tuple of Date, Date and the total amount in number */
   //* Use Date.getTime() method to compare numerical values of dates,
   getSalesBetween(from: Date, to: Date, location?: Location): [Date, Date, number] {
+
+
     const salesInLocation = location ? this._sales.filter((transaction) => transaction.location === location) : this._sales;
     const salesBetween = salesInLocation.filter((transaction) => {
       const date = new Date(transaction.saleDate).getTime();
-      if (date >= from.getTime() && date <= to.getTime()) {
+      if (date >= from.getTime() && date < to.getTime()) {
         return true;
       }
       return false;

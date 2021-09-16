@@ -41,7 +41,7 @@ export class Analytics extends Sales {
     const itemQuantity: ItemDictionary = {};
     const perItem: [Item, number][] = filteredSales
       .map((transaction) => {
-        return Object.entries(transaction.perItem(Accounting.REVENUE));
+        return Object.entries(transaction.perItem(Accounting.QUANTITY));
       })
       .flat() as [Item, number][];
     perItem.forEach((item) => {
