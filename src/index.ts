@@ -13,21 +13,11 @@ const readInterface = readline.createInterface({
   output: null,
   console: false
 });
-const item = [];
-const tags = [];
-const locations = [];
-const purchaseMeth = [];
+
 const a: Requirements = new Analytics([])
 readInterface.on('line', function(line) {
  
   const obj: any = JSON.parse(line)
-  // console.log(...obj.items);
-  // console.log(obj);
-  item.push(...obj.items);
-  tags.push(...obj.items);
-  locations.push(obj.storeLocation);
-  purchaseMeth.push(obj.purchaseMethod);
-
 
   const t: AbstractTransaction = new Transaction(Parser.getCustomer(obj), Parser.getProducts(obj),
     Parser.getLocation(obj), Parser.getDate(obj),
@@ -64,19 +54,6 @@ readInterface.on('line', function(line) {
   console.log(a.medianAge('New York'));
   console.log(a.medianAge('Phone'));
   console.log(a.medianAge('F'));
-
-
-
-
-
-
-
-
-
-
-
-
-
   // console.log(a.listItems());
   // console.log(a.listLocations());
   // console.log(a.listPurchaseMethods());
