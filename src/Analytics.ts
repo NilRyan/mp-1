@@ -51,9 +51,7 @@ export class Analytics extends Sales {
         itemQuantity[item[0]] = item[1];
       }
     });
-    const sortCallBack =
-      Order.ASC === order ? (a, b) => a[1] - b[1] : (a, b) => b[1] - a[1];
-    return { items: Object.entries(itemQuantity).sort(sortCallBack) };
+    return { items: Object.entries(itemQuantity).sort(this.sortCallBack(order)) };
   }
 
   /* This function accepts two required parameters.
@@ -108,18 +106,7 @@ export class Analytics extends Sales {
   ): Rank | undefined {
     const locQuantity: LocDictionary = {};
     const level = order === Order.ASC ? Level.LOWEST : Level.HIGHEST;
-    if (acct === Accounting.QUANTITY) {
-      this._sales
-        .map((transaction) => [transaction.location, transaction.total(acct)])
-        .forEach((loc) => {
-          if (locQuantity[loc[0]] !== undefined) {
-            locQuantity[loc[0]] += Number(loc[1]);
-          } else {
-            locQuantity[loc[0]] = Number(loc[1]);
-          }
-        });
-    }
-    if (acct === Accounting.REVENUE) {
+    if (acct === Accounting.QUANTITY || acct === Accounting.REVENUE) {
       this._sales
         .map((transaction) => [transaction.location, transaction.total(acct)])
         .forEach((loc) => {
@@ -163,37 +150,30 @@ export class Analytics extends Sales {
     For example, medianAge('notepad') will return the median age of the customers who bought a notepad
     Another example, medianAge('Denver') will return the median age of the customers who bought in Denver branch */
   medianAge(category: AttributesB): number | undefined {
-    let ages: number[] = [];
+    let ages: Transaction[] = [];
     if (isType<AttributesB>(category, Items)) {
       ages = this._sales
-        .filter((transaction) =>
-          transaction.listItems().includes(category as Item)
-        )
-        .map((transaction) => transaction.customer.age);
+        .filter((transaction) => transaction.listItems().includes(category as Item))   
     }
     if (isType<AttributesB>(category, Locations)) {
       ages = this._sales
         .filter((transaction) => transaction.location === category as Location)
-        .map((transaction) => transaction.customer.age);
     }
     if (isType<AttributesB>(category, PurchaseMethods)) {
       ages = this._sales
         .filter((transaction) => transaction.purchaseMethod === category as PurchaseMethod)
-        .map((transaction) => transaction.customer.age);
     }
     if (isType<AttributesB>(category, Genders)) {
       if (category === 'M') {
         ages = this._sales
           .filter((transaction) => transaction.customer.gender === 'M' as Gender)
-          .map((transaction) => transaction.customer.age);
       }
       if (category === 'F') {
         ages = this._sales
           .filter((transaction) => transaction.customer.gender === 'F' as Gender)
-          .map((transaction) => transaction.customer.age);
       }
     }
-    return this.median(ages);
+    return this.median(ages.map((transaction) => transaction.customer.age));
   }
 
   median(numbers: number[]): number {
@@ -205,10 +185,6 @@ export class Analytics extends Sales {
       ? (median = (numbers[numsLen / 2 - 1] + numbers[numsLen / 2]) / 2)
       : (median = numbers[(numsLen - 1) / 2]);
     return median;
-  }
-
-  sortCallBack(order: Order) {
-    return Order.ASC === order ? (a, b) => a[1] - b[1] : (a, b) => b[1] - a[1];
   }
 
   filterByCategory(category: AttributesA): Transaction[] {
@@ -234,5 +210,8 @@ export class Analytics extends Sales {
       );
     }
     return filteredSales;
+  }
+  sortCallBack(order: Order) {
+    return Order.ASC === order ? (a, b) => a[1] - b[1] : (a, b) => b[1] - a[1];
   }
 }

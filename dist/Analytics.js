@@ -34,8 +34,7 @@ class Analytics extends Sales_1.Sales {
                 itemQuantity[item[0]] = item[1];
             }
         });
-        const sortCallBack = DataTypes_1.Order.ASC === order ? (a, b) => a[1] - b[1] : (a, b) => b[1] - a[1];
-        return { items: Object.entries(itemQuantity).sort(sortCallBack) };
+        return { items: Object.entries(itemQuantity).sort(this.sortCallBack(order)) };
     }
     /* This function accepts two required parameters.
       The category specifies either gender, age or coupon
@@ -81,19 +80,7 @@ class Analytics extends Sales_1.Sales {
     rankLocationBy(acct, order, item) {
         const locQuantity = {};
         const level = order === DataTypes_1.Order.ASC ? DataTypes_1.Level.LOWEST : DataTypes_1.Level.HIGHEST;
-        if (acct === DataTypes_1.Accounting.QUANTITY) {
-            this._sales
-                .map((transaction) => [transaction.location, transaction.total(acct)])
-                .forEach((loc) => {
-                if (locQuantity[loc[0]] !== undefined) {
-                    locQuantity[loc[0]] += Number(loc[1]);
-                }
-                else {
-                    locQuantity[loc[0]] = Number(loc[1]);
-                }
-            });
-        }
-        if (acct === DataTypes_1.Accounting.REVENUE) {
+        if (acct === DataTypes_1.Accounting.QUANTITY || acct === DataTypes_1.Accounting.REVENUE) {
             this._sales
                 .map((transaction) => [transaction.location, transaction.total(acct)])
                 .forEach((loc) => {
@@ -139,32 +126,27 @@ class Analytics extends Sales_1.Sales {
         let ages = [];
         if ((0, DataTypes_1.isType)(category, DataTypes_1.Items)) {
             ages = this._sales
-                .filter((transaction) => transaction.listItems().includes(category))
-                .map((transaction) => transaction.customer.age);
+                .filter((transaction) => transaction.listItems().includes(category));
         }
         if ((0, DataTypes_1.isType)(category, DataTypes_1.Locations)) {
             ages = this._sales
-                .filter((transaction) => transaction.location === category)
-                .map((transaction) => transaction.customer.age);
+                .filter((transaction) => transaction.location === category);
         }
         if ((0, DataTypes_1.isType)(category, DataTypes_1.PurchaseMethods)) {
             ages = this._sales
-                .filter((transaction) => transaction.purchaseMethod === category)
-                .map((transaction) => transaction.customer.age);
+                .filter((transaction) => transaction.purchaseMethod === category);
         }
         if ((0, DataTypes_1.isType)(category, DataTypes_1.Genders)) {
             if (category === 'M') {
                 ages = this._sales
-                    .filter((transaction) => transaction.customer.gender === 'M')
-                    .map((transaction) => transaction.customer.age);
+                    .filter((transaction) => transaction.customer.gender === 'M');
             }
             if (category === 'F') {
                 ages = this._sales
-                    .filter((transaction) => transaction.customer.gender === 'F')
-                    .map((transaction) => transaction.customer.age);
+                    .filter((transaction) => transaction.customer.gender === 'F');
             }
         }
-        return this.median(ages);
+        return this.median(ages.map((transaction) => transaction.customer.age));
     }
     median(numbers) {
         let median = 0;
@@ -174,9 +156,6 @@ class Analytics extends Sales_1.Sales {
             ? (median = (numbers[numsLen / 2 - 1] + numbers[numsLen / 2]) / 2)
             : (median = numbers[(numsLen - 1) / 2]);
         return median;
-    }
-    sortCallBack(order) {
-        return DataTypes_1.Order.ASC === order ? (a, b) => a[1] - b[1] : (a, b) => b[1] - a[1];
     }
     filterByCategory(category) {
         let filteredSales;
@@ -195,6 +174,9 @@ class Analytics extends Sales_1.Sales {
             filteredSales = this._sales.filter((transaction) => transaction.customer.age === category);
         }
         return filteredSales;
+    }
+    sortCallBack(order) {
+        return DataTypes_1.Order.ASC === order ? (a, b) => a[1] - b[1] : (a, b) => b[1] - a[1];
     }
 }
 exports.Analytics = Analytics;

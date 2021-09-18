@@ -11,19 +11,9 @@ const readInterface = readline.createInterface({
     output: null,
     console: false
 });
-const item = [];
-const tags = [];
-const locations = [];
-const purchaseMeth = [];
 const a = new Analytics_1.Analytics([]);
 readInterface.on('line', function (line) {
     const obj = JSON.parse(line);
-    // console.log(...obj.items);
-    // console.log(obj);
-    item.push(...obj.items);
-    tags.push(...obj.items);
-    locations.push(obj.storeLocation);
-    purchaseMeth.push(obj.purchaseMethod);
     const t = new Transaction_1.Transaction(Parser_1.Parser.getCustomer(obj), Parser_1.Parser.getProducts(obj), Parser_1.Parser.getLocation(obj), Parser_1.Parser.getDate(obj), Parser_1.Parser.getSatisfaction(obj), Parser_1.Parser.getCoupon(obj), Parser_1.Parser.getPurchaseMethod(obj));
     a.add(t);
 }).on('close', function (line) {
