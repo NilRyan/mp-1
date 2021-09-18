@@ -1,4 +1,4 @@
-import { Accounting, AttributesA, AttributesB, GenderEnum, isType, Item, ItemDictionary, Items, Locations, Location, LocDictionary, Order, PurchaseMethod, Gender, Genders, PurchaseMethods, Level, TagDictionary } from "../../DataTypes";
+import { Accounting, AttributesA, AttributesB, GenderEnum, isType, Item, ItemDictionary, Items, Locations, Location, LocDictionary, Order, PurchaseMethod, Gender, Genders, PurchaseMethods, Level} from "../../DataTypes";
 import { Transaction } from "../../Transaction";
 
 export function countPerItem(filteredSales: Transaction[]): ItemDictionary {
@@ -16,7 +16,6 @@ export function countPerItem(filteredSales: Transaction[]): ItemDictionary {
 }
 
 export function countPerLocation(acct: Accounting, order: Order, sales: Transaction[], item?: Item): LocDictionary {
-  const level = order === Order.ASC ? Level.LOWEST : Level.HIGHEST;
   if (acct === Accounting.QUANTITY || acct === Accounting.REVENUE) {
     const locQuantity: LocDictionary = sales
       .map((transaction) => [transaction.location, transaction.total(acct)])
@@ -26,30 +25,33 @@ export function countPerLocation(acct: Accounting, order: Order, sales: Transact
       }, {});
     return locQuantity;
   }
+ 
   const locQuantity: LocDictionary = {};
   if (acct === Accounting.PRICE) {
-    sales
-      .map((transaction) => {
-        const price = transaction.perItem(acct)[item]
-          ? transaction.perItem(acct)[item]
-          : 0;
-        return [transaction.location, price];
-      })
+    const level = order === Order.ASC ? Level.LOWEST : Level.HIGHEST;
+    sales.map((transaction) => {
+        const price = transaction.perItem(acct, level)[item] ? transaction.perItem(acct, level)[item] : 0;
+        return [transaction.location, Number(price)];
+    })
+      .filter(([_, price]) => price !== 0)
       .forEach(([loc, price]) => {
         if (locQuantity[loc] !== undefined) {
           if (level === Level.HIGHEST) {
             locQuantity[loc] = locQuantity[loc] < price ? price : locQuantity[loc];
           }
           if (level === Level.LOWEST) {
-            locQuantity[loc] = locQuantity[loc] < price ? locQuantity[loc] : price ;
+            locQuantity[loc] = locQuantity[loc] < price && locQuantity[loc] ? locQuantity[loc] : price;
+            
           }
         } else {
           locQuantity[loc] = price;
         }
+
       });
+      return locQuantity;
     }
     
-    return locQuantity;
+ 
 }
 export function filterByCategoryA(category: AttributesA, sales: Transaction[]): Transaction[] {
   let filteredSales: Transaction[];
@@ -93,7 +95,16 @@ export function filterByCategoryB(category: AttributesB, sales: Transaction[]): 
 }
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function sortCallBack(order: Order) {
-  return Order.ASC === order ? (a, b) => a[1] - b[1] : (a, b) => b[1] - a[1];
+  if (Order.ASC === order) {
+    return ([name1, qty1], [name2, qty2]) => {
+      return qty1 - qty2 === 0 ? name2.localeCompare(name1) : qty1 - qty2;
+    }
+  } else {
+    return ([name1, qty1], [name2, qty2]) => {
+      return qty2 - qty1 === 0 ? name1.localeCompare(name2) : qty2 - qty1;
+    }
+  }
+
 }
 export function averageSatisfaction(filteredSales: Transaction[]): LocDictionary {
   const locTotalSatisfaction: LocDictionary = {};

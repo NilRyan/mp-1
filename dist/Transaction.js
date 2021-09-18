@@ -64,14 +64,13 @@ class Transaction extends AbstractTransaction_1.AbstractTransaction {
             //* Used forEach to determine the prices of each item, a product array can have
             //* multiple items with the same name and different prices
             //* Will implement level to determine highest or lowest prices in the item dictionary
-            //! Implemented highest prices as default for now
             this._products.forEach(({ item, price }) => {
                 if (prices[item] !== undefined) {
                     if (DataTypes_1.Level.HIGHEST === level) {
-                        prices[item] = price[item] < price ? price : price[item];
+                        prices[item] = prices[item] < price ? price : prices[item];
                     }
                     if (DataTypes_1.Level.LOWEST === level) {
-                        prices[item] = price[item] < price ? price[item] : price;
+                        prices[item] = prices[item] < price ? prices[item] : price;
                     }
                 }
                 else {

@@ -16,7 +16,6 @@ function countPerItem(filteredSales) {
 }
 exports.countPerItem = countPerItem;
 function countPerLocation(acct, order, sales, item) {
-    const level = order === DataTypes_1.Order.ASC ? DataTypes_1.Level.LOWEST : DataTypes_1.Level.HIGHEST;
     if (acct === DataTypes_1.Accounting.QUANTITY || acct === DataTypes_1.Accounting.REVENUE) {
         const locQuantity = sales
             .map((transaction) => [transaction.location, transaction.total(acct)])
@@ -28,28 +27,27 @@ function countPerLocation(acct, order, sales, item) {
     }
     const locQuantity = {};
     if (acct === DataTypes_1.Accounting.PRICE) {
-        sales
-            .map((transaction) => {
-            const price = transaction.perItem(acct)[item]
-                ? transaction.perItem(acct)[item]
-                : 0;
-            return [transaction.location, price];
+        const level = order === DataTypes_1.Order.ASC ? DataTypes_1.Level.LOWEST : DataTypes_1.Level.HIGHEST;
+        sales.map((transaction) => {
+            const price = transaction.perItem(acct, level)[item] ? transaction.perItem(acct, level)[item] : 0;
+            return [transaction.location, Number(price)];
         })
+            .filter(([_, price]) => price !== 0)
             .forEach(([loc, price]) => {
             if (locQuantity[loc] !== undefined) {
                 if (level === DataTypes_1.Level.HIGHEST) {
                     locQuantity[loc] = locQuantity[loc] < price ? price : locQuantity[loc];
                 }
                 if (level === DataTypes_1.Level.LOWEST) {
-                    locQuantity[loc] = locQuantity[loc] < price ? locQuantity[loc] : price;
+                    locQuantity[loc] = locQuantity[loc] < price && locQuantity[loc] ? locQuantity[loc] : price;
                 }
             }
             else {
                 locQuantity[loc] = price;
             }
         });
+        return locQuantity;
     }
-    return locQuantity;
 }
 exports.countPerLocation = countPerLocation;
 function filterByCategoryA(category, sales) {
@@ -91,7 +89,16 @@ function filterByCategoryB(category, sales) {
 exports.filterByCategoryB = filterByCategoryB;
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 function sortCallBack(order) {
-    return DataTypes_1.Order.ASC === order ? (a, b) => a[1] - b[1] : (a, b) => b[1] - a[1];
+    if (DataTypes_1.Order.ASC === order) {
+        return ([name1, qty1], [name2, qty2]) => {
+            return qty1 - qty2 === 0 ? name2.localeCompare(name1) : qty1 - qty2;
+        };
+    }
+    else {
+        return ([name1, qty1], [name2, qty2]) => {
+            return qty2 - qty1 === 0 ? name1.localeCompare(name2) : qty2 - qty1;
+        };
+    }
 }
 exports.sortCallBack = sortCallBack;
 function averageSatisfaction(filteredSales) {
