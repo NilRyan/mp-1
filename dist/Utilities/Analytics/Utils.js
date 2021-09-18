@@ -3,20 +3,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.median = exports.averageSatisfaction = exports.sortCallBack = exports.filterByCategoryB = exports.filterByCategoryA = exports.countPerLocation = exports.countPerItem = void 0;
 const DataTypes_1 = require("../../DataTypes");
 function countPerItem(filteredSales) {
-    const itemQuantity = {};
     const perItem = filteredSales
         .map((transaction) => {
         return Object.entries(transaction.perItem(DataTypes_1.Accounting.QUANTITY));
     })
         .flat();
-    perItem.forEach((item) => {
-        if (itemQuantity[item[0]] !== undefined) {
-            itemQuantity[item[0]] += item[1];
-        }
-        else {
-            itemQuantity[item[0]] = item[1];
-        }
-    });
+    const itemQuantity = perItem.reduce((dict, [item, qty]) => {
+        dict[item] = dict[item] ? dict[item] + qty : qty;
+        return dict;
+    }, {});
     return itemQuantity;
 }
 exports.countPerItem = countPerItem;

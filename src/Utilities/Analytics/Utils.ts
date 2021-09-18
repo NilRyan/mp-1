@@ -1,21 +1,17 @@
-import { Accounting, AttributesA, AttributesB, GenderEnum, isType, Item, ItemDictionary, Items, Locations, Location, LocDictionary, Order, PurchaseMethod, Gender, Genders, PurchaseMethods, Level } from "../../DataTypes";
+import { Accounting, AttributesA, AttributesB, GenderEnum, isType, Item, ItemDictionary, Items, Locations, Location, LocDictionary, Order, PurchaseMethod, Gender, Genders, PurchaseMethods, Level, TagDictionary } from "../../DataTypes";
 import { Transaction } from "../../Transaction";
 
 export function countPerItem(filteredSales: Transaction[]): ItemDictionary {
-  const itemQuantity: ItemDictionary = {};
   const perItem: [Item, number][] = filteredSales
     .map((transaction) => {
       return Object.entries(transaction.perItem(Accounting.QUANTITY));
     })
     .flat() as [Item, number][];
-    
-  perItem.forEach((item) => {
-    if (itemQuantity[item[0]] !== undefined) {
-      itemQuantity[item[0]] += item[1];
-    } else {
-      itemQuantity[item[0]] = item[1];
-    } 
-  })
+  
+  const itemQuantity: ItemDictionary = perItem.reduce((dict, [item, qty]) => {
+    dict[item] = dict[item] ? dict[item] + qty : qty;
+    return dict;
+  }, {})
   return itemQuantity;
 }
 
@@ -141,3 +137,4 @@ export function median(numbers: number[]): number {
     : (median = numbers[(numsLen - 1) / 2]);
   return median;
 }
+
