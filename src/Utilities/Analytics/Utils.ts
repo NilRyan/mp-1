@@ -16,20 +16,17 @@ export function countPerItem(filteredSales: Transaction[]): ItemDictionary {
 }
 
 export function countPerLocation(acct: Accounting, order: Order, sales: Transaction[], item?: Item): LocDictionary {
-  const locQuantity: LocDictionary = {};
   const level = order === Order.ASC ? Level.LOWEST : Level.HIGHEST;
   if (acct === Accounting.QUANTITY || acct === Accounting.REVENUE) {
-   sales
+    const locQuantity: LocDictionary = sales
       .map((transaction) => [transaction.location, transaction.total(acct)])
-      .forEach((loc) => {
-        if (locQuantity[loc[0]] !== undefined) {
-          locQuantity[loc[0]] += Number(loc[1]);
-        } else {
-          locQuantity[loc[0]] = Number(loc[1]);
-        }
-      });
+      .reduce((dict, [loc, qty]) => {
+        dict[loc] = dict[loc] ? dict[loc] + qty : qty;
+        return dict;
+      }, {});
+    return locQuantity;
   }
-
+  const locQuantity: LocDictionary = {};
   if (acct === Accounting.PRICE) {
     sales
       .map((transaction) => {
@@ -38,16 +35,16 @@ export function countPerLocation(acct: Accounting, order: Order, sales: Transact
           : 0;
         return [transaction.location, price];
       })
-      .forEach((loc) => {
-        if (locQuantity[loc[0]] !== undefined) {
+      .forEach(([loc, price]) => {
+        if (locQuantity[loc] !== undefined) {
           if (level === Level.HIGHEST) {
-            locQuantity[loc[0]] = locQuantity[loc[0]] < Number(loc[1]) ? loc[1] : locQuantity[loc[0]];
+            locQuantity[loc] = locQuantity[loc] < price ? price : locQuantity[loc];
           }
           if (level === Level.LOWEST) {
-            locQuantity[loc[0]] = locQuantity[loc[0]] < Number(loc[1]) ? locQuantity[loc[0]] : loc[1] ;
+            locQuantity[loc] = locQuantity[loc] < price ? locQuantity[loc] : price ;
           }
         } else {
-          locQuantity[loc[0]] = Number(loc[1]);
+          locQuantity[loc] = price;
         }
       });
     }

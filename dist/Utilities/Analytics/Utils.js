@@ -16,20 +16,17 @@ function countPerItem(filteredSales) {
 }
 exports.countPerItem = countPerItem;
 function countPerLocation(acct, order, sales, item) {
-    const locQuantity = {};
     const level = order === DataTypes_1.Order.ASC ? DataTypes_1.Level.LOWEST : DataTypes_1.Level.HIGHEST;
     if (acct === DataTypes_1.Accounting.QUANTITY || acct === DataTypes_1.Accounting.REVENUE) {
-        sales
+        const locQuantity = sales
             .map((transaction) => [transaction.location, transaction.total(acct)])
-            .forEach((loc) => {
-            if (locQuantity[loc[0]] !== undefined) {
-                locQuantity[loc[0]] += Number(loc[1]);
-            }
-            else {
-                locQuantity[loc[0]] = Number(loc[1]);
-            }
-        });
+            .reduce((dict, [loc, qty]) => {
+            dict[loc] = dict[loc] ? dict[loc] + qty : qty;
+            return dict;
+        }, {});
+        return locQuantity;
     }
+    const locQuantity = {};
     if (acct === DataTypes_1.Accounting.PRICE) {
         sales
             .map((transaction) => {
@@ -38,17 +35,17 @@ function countPerLocation(acct, order, sales, item) {
                 : 0;
             return [transaction.location, price];
         })
-            .forEach((loc) => {
-            if (locQuantity[loc[0]] !== undefined) {
+            .forEach(([loc, price]) => {
+            if (locQuantity[loc] !== undefined) {
                 if (level === DataTypes_1.Level.HIGHEST) {
-                    locQuantity[loc[0]] = locQuantity[loc[0]] < Number(loc[1]) ? loc[1] : locQuantity[loc[0]];
+                    locQuantity[loc] = locQuantity[loc] < price ? price : locQuantity[loc];
                 }
                 if (level === DataTypes_1.Level.LOWEST) {
-                    locQuantity[loc[0]] = locQuantity[loc[0]] < Number(loc[1]) ? locQuantity[loc[0]] : loc[1];
+                    locQuantity[loc] = locQuantity[loc] < price ? locQuantity[loc] : price;
                 }
             }
             else {
-                locQuantity[loc[0]] = Number(loc[1]);
+                locQuantity[loc] = price;
             }
         });
     }
