@@ -1,6 +1,7 @@
 import { Accounting, AttributesA, AttributesB, Item, Level, Order, Rank, Location, Period, Month, Day, Tag, PurchaseMethod } from "./DataTypes";
 import { Requirements } from "./Requirements";
 import { Transaction } from "./Transaction";
+import { periodSales } from "./Utilities/Sales/Utils";
 
 export abstract class Sales implements Requirements {
   constructor(protected _sales: Transaction[]) {}
@@ -64,33 +65,14 @@ export abstract class Sales implements Requirements {
 
     if (period === Period.YEARLY) {
       const year = sales.map((transaction) => [transaction.getYear(), transaction.total(Accounting.REVENUE)] as [number, number]).sort();
-      const yearlySales = [...new Set(year.map((el) => el[0]))].map((el) => {
-        const sale: [number, number] = [el, 0];
-        year.forEach((year) => {
-          if (year[0] === el) {
-            sale[1] += year[1];
-          }
-         
-        });
-        return sale;
-      });
-     
+      const yearlySales = periodSales(year);
       salesFor["yearlySales"] = yearlySales;
       return salesFor;
     }
 
     if (period === Period.MONTHLY) {
       const month = sales.map((transaction) => [transaction.getMonth(), transaction.total(Accounting.REVENUE)] as [Month, number]);
-      const monthlySales = [...new Set(month.map((el) => el[0]))].map((el) => {
-        const sale: [Month, number] = [el, 0];
-          month.forEach((month) => {
-          if (month[0] === el) {
-            sale[1] += month[1];
-          }
-         
-        });
-        return sale;
-      });
+      const monthlySales = periodSales(month);
       const monthLookUp = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       salesFor["monthlySales"] = monthLookUp.map((month) => {
         return [month as Month, monthlySales.find((m) => m[0] === month)[1]];
@@ -100,16 +82,7 @@ export abstract class Sales implements Requirements {
 
     if (period === Period.WEEKLY) {
       const week = sales.map((transaction) => [transaction.getDay(), transaction.total(Accounting.REVENUE)] as [Day, number]);
-      const weeklySales = [...new Set(week.map((el) => el[0]))].map((el) => {
-        const sale: [Day, number] = [el, 0];
-          week.forEach((week) => {
-          if (week[0] === el) {
-            sale[1] += week[1];
-          }
-         
-        });
-        return sale;
-      });
+      const weeklySales = periodSales(week);
       const weekLookUp = ['Sun','Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
       salesFor["weeklySales"] = weekLookUp.map((week) => {
         return [week as Day, weeklySales.find((m) => m[0] === week)[1]];
