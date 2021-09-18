@@ -74,16 +74,16 @@ export class Transaction extends AbstractTransaction {
     e.g. {'notepad':123,'laptop':345} */
   // TODO implement the level
   perItem(acct: Accounting, level?: Level): ItemDictionary {
-    const quantity: ItemDictionary = {};
+    const qty: ItemDictionary = {};
     const revenue: ItemDictionary = {};
-    const price: ItemDictionary = {};
+    const prices: ItemDictionary = {};
 
     if (acct === Accounting.REVENUE) {
-      this._products.forEach((product) => {
-        if (revenue[product.item] !== undefined) {
-          revenue[product.item] += product.price * product.quantity;
+      this._products.forEach(({item, price, quantity}) => {
+        if (revenue[item] !== undefined) {
+          revenue[item] += price * quantity;
         } else {
-          revenue[product.item] = product.price * product.quantity;
+          revenue[item] = price * quantity;
         }
       });
       return revenue;
@@ -94,32 +94,32 @@ export class Transaction extends AbstractTransaction {
       //* multiple items with the same name and different prices
       //* Will implement level to determine highest or lowest prices in the item dictionary
       //! Implemented highest prices as default for now
-      this._products.forEach((product) => {
-        if (price[product.item] !== undefined) {
+      this._products.forEach(({item, price}) => {
+        if (prices[item] !== undefined) {
           if (Level.HIGHEST === level) {
-            price[product.item] = price[product.item] < product.price ? product.price : price[product.item];
+            prices[item] = price[item] < price ? price : price[item];
           }
 
           if (Level.LOWEST === level) {
-            price[product.item] = price[product.item] < product.price ? price[product.item] : product.price;
+            prices[item] = price[item] < price ? price[item] : price;
           }
         } else {
-          price[product.item] = product.price;
+          prices[item] = price;
         }
       });
       
-      return price;
+      return prices;
     }
     if (acct === Accounting.QUANTITY) {
       //* Used forEach to count quantity of an item in the Product[]
-      this._products.forEach((product) => {
-        if (quantity[product.item] !== undefined) {
-          quantity[product.item] += product.quantity;
+      this._products.forEach(({item, quantity}) => {
+        if (qty[item] !== undefined) {
+          qty[item] += quantity;
         } else {
-          quantity[product.item] = product.quantity;
+          qty[item] = quantity;
         }
       });
-      return quantity;
+      return qty;
     }
   }
 

@@ -54,19 +54,16 @@ function countPerLocation(acct, order, sales, item) {
 exports.countPerLocation = countPerLocation;
 function filterByCategoryA(category, sales) {
     let filteredSales;
-    if (category === DataTypes_1.GenderEnum.M) {
-        filteredSales = sales.filter((transaction) => transaction.customer.gender === DataTypes_1.GenderEnum.M);
-    }
-    if (category === DataTypes_1.GenderEnum.F) {
-        filteredSales = sales.filter((transaction) => transaction.customer.gender === DataTypes_1.GenderEnum.F);
+    if (category === DataTypes_1.GenderEnum.M || category === DataTypes_1.GenderEnum.F) {
+        filteredSales = sales.filter(({ customer }) => customer.gender === category);
     }
     if (typeof category === "boolean") {
         filteredSales = category
-            ? sales.filter((transaction) => transaction.coupon === true)
-            : sales.filter((transaction) => transaction.coupon === false);
+            ? sales.filter(({ coupon }) => coupon === true)
+            : sales.filter(({ coupon }) => coupon === false);
     }
     if (typeof category === "number") {
-        filteredSales = sales.filter((transaction) => transaction.customer.age === category);
+        filteredSales = sales.filter(({ customer }) => customer.age === category);
     }
     return filteredSales;
 }
@@ -79,21 +76,15 @@ function filterByCategoryB(category, sales) {
     }
     if ((0, DataTypes_1.isType)(category, DataTypes_1.Locations)) {
         filteredTransaction = sales
-            .filter((transaction) => transaction.location === category);
+            .filter(({ location }) => location === category);
     }
     if ((0, DataTypes_1.isType)(category, DataTypes_1.PurchaseMethods)) {
         filteredTransaction = sales
-            .filter((transaction) => transaction.purchaseMethod === category);
+            .filter(({ purchaseMethod }) => purchaseMethod === category);
     }
     if ((0, DataTypes_1.isType)(category, DataTypes_1.Genders)) {
-        if (category === 'M') {
-            filteredTransaction = sales
-                .filter((transaction) => transaction.customer.gender === 'M');
-        }
-        if (category === 'F') {
-            filteredTransaction = sales
-                .filter((transaction) => transaction.customer.gender === 'F');
-        }
+        filteredTransaction = sales
+            .filter(({ customer }) => customer.gender === category);
     }
     return filteredTransaction;
 }
@@ -107,14 +98,14 @@ function averageSatisfaction(filteredSales) {
     const locTotalSatisfaction = {};
     const locCustomerCount = {};
     const locAvgSatisfaction = {};
-    filteredSales.forEach((transaction) => {
-        if (locTotalSatisfaction[transaction.location] !== undefined) {
-            locTotalSatisfaction[transaction.location] += transaction.satisfaction;
-            locCustomerCount[transaction.location] += 1;
+    filteredSales.forEach(({ location, satisfaction }) => {
+        if (locTotalSatisfaction[location] !== undefined) {
+            locTotalSatisfaction[location] += satisfaction;
+            locCustomerCount[location] += 1;
         }
         else {
-            locTotalSatisfaction[transaction.location] = transaction.satisfaction;
-            locCustomerCount[transaction.location] = 1;
+            locTotalSatisfaction[location] = satisfaction;
+            locCustomerCount[location] = 1;
         }
     });
     for (const location in locTotalSatisfaction) {
