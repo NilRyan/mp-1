@@ -40,7 +40,7 @@ export function countPerLocation(acct: Accounting, order: Order, sales: Transact
             locQuantity[loc] = locQuantity[loc] < price ? price : locQuantity[loc];
           }
           if (level === Level.LOWEST) {
-            locQuantity[loc] = locQuantity[loc] < price && locQuantity[loc] ? locQuantity[loc] : price;
+            locQuantity[loc] = locQuantity[loc] < price ? locQuantity[loc] : price;
             
           }
         } else {

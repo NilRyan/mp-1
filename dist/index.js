@@ -48,11 +48,12 @@ readInterface.on('line', function (line) {
     console.log(a.medianAge('New York'));
     console.log(a.medianAge('Phone'));
     console.log(a.medianAge('F'));
-    // console.log(a.listItems());
-    // console.log(a.listLocations());
-    // console.log(a.listPurchaseMethods());
-    // console.log(a.listTags());
+    console.log(a.medianAge('M'));
+    console.log(a.medianAge('binder'));
     // console.log(a.getPrice('Denver', 'notepad', Level.LOWEST));
+    // console.log(a.getPrice('Austin', 'binder', Level.HIGHEST));
+    // console.log(a.getPrice('London', 'backpack', Level.HIGHEST));
+    // console.log(a.getSalesFor(Period.ALL, 'New York'));
     // console.log(a.getSalesFor(Period.ALL));
     // console.log(a.getSalesFor(Period.YEARLY));
     // console.log(a.getSalesFor(Period.MONTHLY));
@@ -62,12 +63,19 @@ readInterface.on('line', function (line) {
     // console.log(a.getSales(Period.WEEKLY, Level.LOWEST));
     // console.log(a.getSalesBetween(new Date("2013-10-06T22:39:37.868Z"), new Date("2016-01-20T17:29:10.225Z")));
     // console.log(a.rankProductsBy('M', Order.DESC));
+    // console.log(a.rankProductsBy('F', Order.ASC));
+    // console.log(a.rankProductsBy(true, Order.ASC));
+    // console.log(a.rankProductsBy(false, Order.ASC));
+    // // console.log(a.rankProductsBy(25, Order.ASC));
     // console.log(a.rankLocationSatisfactionBy(true, Order.DESC));
     // console.log(a.rankLocationBy(Accounting.QUANTITY, Order.ASC));
     // console.log(a.rankLocationBy(Accounting.REVENUE, Order.DESC));
-    // console.log(a.rankLocationBy(Accounting.PRICE, Order.DESC, 'binder'));
+    // console.log(a.rankLocationBy(Accounting.PRICE, Order.ASC, 'binder'));
     // console.log(a.medianAge("F"));
     // console.log(a.medianAge('notepad'))
+    // console.log(a.getSalesBetween(new Date('2017-01-01'), new Date('2017-01-31'), 'Denver'));
+    // console.log(a.getSalesBetween(new Date('2016-01-01'), new Date('2017-01-31'), 'San Diego'));
+    // console.log(a.getSalesBetween(new Date('2017-01-01'), new Date('2017-01-31')));
     // console.log(2)
     // console.log(new Set(item.map((i) => i.name))); // Item
     // console.log(new Set(tags.map((i) => {

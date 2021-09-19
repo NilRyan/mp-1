@@ -39,7 +39,7 @@ function countPerLocation(acct, order, sales, item) {
                     locQuantity[loc] = locQuantity[loc] < price ? price : locQuantity[loc];
                 }
                 if (level === DataTypes_1.Level.LOWEST) {
-                    locQuantity[loc] = locQuantity[loc] < price && locQuantity[loc] ? locQuantity[loc] : price;
+                    locQuantity[loc] = locQuantity[loc] < price ? locQuantity[loc] : price;
                 }
             }
             else {

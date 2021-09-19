@@ -28,7 +28,7 @@ const Month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'O
 exports.Months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const Day = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 exports.Days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat',];
-/* //*Use a function with a generic type to determine if an inputted value is of Type
+/* //*Used a function with a generic type to determine if an inputted value is of Type
   //*I did this because I cannot use typeof for type aliases, only primitives have the capability to use typeof
   //*This is due to type aliases not existing at runtime
   //*As a work around we can use this function that finds out if the value is of type using an array */

@@ -6,12 +6,12 @@ import { Product } from "./Product";
 
 export class Parser {
   static getCustomer(obj: any): Customer {
-    return new Customer(obj.customer.gender, obj.customer.age, obj.customer.email);
+    return new Customer(obj.customer.gender, Number(obj.customer.age), obj.customer.email);
   }
   static getProducts(obj: any): Product[] {
     const products = [];
     obj.items.forEach((item) => {
-      const product = new Product(item.name, item.price.$numberDecimal, item.quantity);
+      const product = new Product(item.name, Number(item.price.$numberDecimal), item.quantity);
       product.tags = item.tags;
       products.push(product);
     })
@@ -24,7 +24,7 @@ export class Parser {
     return obj.saleDate.$date.substr(0, 10);
   }
   static getSatisfaction(obj: any): number {
-    return obj.customer.satisfaction;
+    return Number(obj.customer.satisfaction);
   }
   static getCoupon(obj: any): boolean {
     return obj.couponUsed;
