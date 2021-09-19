@@ -65,8 +65,7 @@ export abstract class Sales implements Requirements {
 
     if (period === Period.YEARLY) {
       const year = sales.map((transaction) => [transaction.getYear(), transaction.total(Accounting.REVENUE)] as [number, number]).sort();
-      const yearlySales = periodSales(year);
-      salesFor["yearlySales"] = yearlySales;
+      salesFor["yearlySales"] = periodSales(year);
       return salesFor;
     }
 

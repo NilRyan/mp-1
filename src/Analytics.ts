@@ -81,7 +81,7 @@ export class Analytics extends Sales {
     Another example, medianAge('Denver') will return the median age of the customers who bought in Denver branch */
   medianAge(category: AttributesB): number | undefined {
     const filteredTransaction: Transaction[] = filterByCategoryB(category, this._sales);
-    return median(filteredTransaction.map((transaction) => transaction.customer.age));
+    return median(filteredTransaction.map(({customer}) => customer.age));
   }
 
 }

@@ -72,7 +72,6 @@ export class Transaction extends AbstractTransaction {
     For Accounting.REVENUE, it will collect all the revenue(price * quantity) per item.
     For Accounting.PRICE, it will collect all the price per item.
     e.g. {'notepad':123,'laptop':345} */
-  // TODO implement the level
   perItem(acct: Accounting, level?: Level): ItemDictionary {
     const qty: ItemDictionary = {};
     const revenue: ItemDictionary = {};
@@ -168,7 +167,7 @@ export class Transaction extends AbstractTransaction {
               prices[tag] = prices[tag] < price ? price : prices[tag];
             }
             if (Level.LOWEST === level) {
-              price[tag] = prices[tag] < prices ? prices[tag]: prices;
+              prices[tag] = prices[tag] < price ? prices[tag]: price;
             }
           } else {
             prices[tag] = price;

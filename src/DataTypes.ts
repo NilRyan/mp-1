@@ -53,7 +53,7 @@ export type LocDictionary = {
 };
 export type SalesPeriod = Month | number | 'all';
 
-/* //*Use a function with a generic type to determine if an inputted value is of Type
+/* //*Used a function with a generic type to determine if an inputted value is of Type
   //*I did this because I cannot use typeof for type aliases, only primitives have the capability to use typeof
   //*This is due to type aliases not existing at runtime
   //*As a work around we can use this function that finds out if the value is of type using an array */

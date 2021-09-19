@@ -1,10 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Parser = void 0;
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+const Customer_1 = require("./Customer");
 const Product_1 = require("./Product");
 class Parser {
     static getCustomer(obj) {
-        return obj.customer;
+        return new Customer_1.Customer(obj.customer.gender, obj.customer.age, obj.customer.email);
     }
     static getProducts(obj) {
         const products = [];

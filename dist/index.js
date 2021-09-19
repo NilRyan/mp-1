@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/* eslint-disable @typescript-eslint/no-var-requires */
 const Parser_1 = require("./Parser");
 const Transaction_1 = require("./Transaction");
 const DataTypes_1 = require("./DataTypes");
@@ -26,6 +27,7 @@ readInterface.on('line', function (line) {
     console.log(a.getSalesFor(DataTypes_1.Period.YEARLY, 'New York'));
     console.log(a.getSalesFor(DataTypes_1.Period.MONTHLY, 'New York'));
     console.log(a.getSalesFor(DataTypes_1.Period.WEEKLY, 'New York'));
+    console.log(a.getSalesFor(DataTypes_1.Period.ALL, 'New York'));
     console.log(a.getSales(DataTypes_1.Period.YEARLY, DataTypes_1.Level.LOWEST));
     console.log(a.getSales(DataTypes_1.Period.MONTHLY, DataTypes_1.Level.LOWEST));
     console.log(a.getSales(DataTypes_1.Period.WEEKLY, DataTypes_1.Level.LOWEST));

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import {Parser} from './Parser'
 import { Requirements } from './Requirements';
 import { Transaction } from './Transaction';
@@ -34,6 +35,7 @@ readInterface.on('line', function(line) {
   console.log(a.getSalesFor(Period.YEARLY, 'New York'));
   console.log(a.getSalesFor(Period.MONTHLY, 'New York'));
   console.log(a.getSalesFor(Period.WEEKLY, 'New York'));
+  console.log(a.getSalesFor(Period.ALL, 'New York'));
   console.log(a.getSales(Period.YEARLY, Level.LOWEST));
   console.log(a.getSales(Period.MONTHLY, Level.LOWEST));
   console.log(a.getSales(Period.WEEKLY, Level.LOWEST));

@@ -61,8 +61,7 @@ class Sales {
         const sales = location ? this._sales.filter((transaction) => transaction.location === location) : this._sales;
         if (period === DataTypes_1.Period.YEARLY) {
             const year = sales.map((transaction) => [transaction.getYear(), transaction.total(DataTypes_1.Accounting.REVENUE)]).sort();
-            const yearlySales = (0, Utils_1.periodSales)(year);
-            salesFor["yearlySales"] = yearlySales;
+            salesFor["yearlySales"] = (0, Utils_1.periodSales)(year);
             return salesFor;
         }
         if (period === DataTypes_1.Period.MONTHLY) {

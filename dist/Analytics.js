@@ -61,7 +61,7 @@ class Analytics extends Sales_1.Sales {
       Another example, medianAge('Denver') will return the median age of the customers who bought in Denver branch */
     medianAge(category) {
         const filteredTransaction = (0, Utils_1.filterByCategoryB)(category, this._sales);
-        return (0, Utils_1.median)(filteredTransaction.map((transaction) => transaction.customer.age));
+        return (0, Utils_1.median)(filteredTransaction.map(({ customer }) => customer.age));
     }
 }
 exports.Analytics = Analytics;
